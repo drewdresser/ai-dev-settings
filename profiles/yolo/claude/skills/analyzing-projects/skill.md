@@ -70,11 +70,26 @@ src/
 
 ## Key Files to Read First
 
-1. **README.md** - Project overview and setup
-2. **package.json / pyproject.toml** - Dependencies and scripts
-3. **docker-compose.yml** - Services and infrastructure
-4. **.env.example** - Required configuration
-5. **Makefile / justfile** - Available commands
+1. **`/strategy/VISION.md`** - Strategic context (if exists)
+2. **`/strategy/OKRs.md`** - Current priorities (if exists)
+3. **`/strategy/adrs/`** - Architecture decisions (if exists)
+4. **README.md** - Project overview and setup
+5. **package.json / pyproject.toml** - Dependencies and scripts
+6. **docker-compose.yml** - Services and infrastructure
+7. **.env.example** - Required configuration
+8. **Makefile / justfile** - Available commands
+
+### Strategy Folder (if present)
+
+If a `/strategy/` folder exists, prioritize reading:
+
+| File | Purpose |
+|------|---------|
+| `VISION.md` | North star, strategic bets, non-goals |
+| `OKRs.md` | Current quarter objectives |
+| `epics/*.md` | Active feature initiatives |
+| `tasks/*.md` | Specific work items |
+| `adrs/*.md` | Settled architectural decisions |
 
 ## Mapping Dependencies
 
@@ -130,6 +145,8 @@ grep -rn "from src\." . --include="*.py"
 
 ## Analysis Checklist
 
+- [ ] Does a `/strategy/` folder exist? If so, read VISION.md and OKRs.md first.
+- [ ] Are there ADRs in `/strategy/adrs/`? These contain settled decisions.
 - [ ] What type of project is this?
 - [ ] What framework(s) are used?
 - [ ] What is the directory structure pattern?

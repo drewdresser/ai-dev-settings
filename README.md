@@ -6,6 +6,7 @@ Personal, versioned configuration for AI coding tools:
 - **Claude Code**: CLAUDE.md + .claude/settings.json
 - **Cursor**: .cursorrules + .cursor/rules/*.mdc + reusable command prompts
 - **Codex**: Global config + AGENTS.md
+- **Workflow**: Multi-project AI agent development framework (see [docs/WORKFLOW.md](docs/WORKFLOW.md))
 
 ## Quick Start
 
@@ -40,6 +41,18 @@ This symlinks global configs into:
 | **safe** | Conservative, ask before changing | Only if explicit | Run existing |
 | **ship** | Pragmatic, localized changes OK | If reduces risk | Add if missing |
 | **yolo** | Assertive, broad changes allowed | Proactive cleanup | Required |
+
+## Workflow Framework
+
+All profiles incorporate the **Multi-Project AI Agent Development Framework** — a structured approach for managing AI-driven development across multiple projects.
+
+**Key concepts:**
+- `/strategy/` folder in each project root for strategic documentation
+- Vision → OKRs → Epics → Tasks hierarchy
+- Architecture Decision Records (ADRs) for preserving decisions
+- Agent-first context consumption pattern
+
+See [docs/WORKFLOW.md](docs/WORKFLOW.md) for the complete framework specification.
 
 ### safe
 
@@ -88,6 +101,8 @@ Preconfigured for:
 ai-dev-settings/
 ├── README.md
 ├── justfile
+├── docs/
+│   └── WORKFLOW.md            # Multi-project AI workflow framework
 ├── profiles/
 │   ├── safe/
 │   │   ├── AGENTS.md
@@ -117,6 +132,26 @@ ai-dev-settings/
 └── scripts/
     ├── install_project.sh
     └── link_global.sh
+```
+
+### Project Strategy Structure (installed per-project)
+
+When following the workflow framework, each project should contain:
+
+```
+your-project/
+├── strategy/
+│   ├── VISION.md              # Strategic foundation
+│   ├── OKRs.md                # Current quarter objectives
+│   ├── epics/
+│   │   └── epic-name.md       # Feature/initiative epics
+│   ├── tasks/
+│   │   └── epic-name-001-task.md  # Specific tasks
+│   └── adrs/
+│       └── 001-decision.md    # Architecture decisions
+├── AGENTS.md
+├── CLAUDE.md
+└── ... (rest of project)
 ```
 
 ## What Gets Installed

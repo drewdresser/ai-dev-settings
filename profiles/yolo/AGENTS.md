@@ -2,12 +2,26 @@
 
 All SHIP rules apply, plus:
 
+## Strategy-First Workflow
+
+If a `/strategy/` folder exists in the project root, follow the **AI Agent Handoff Pattern**:
+
+1. Read `/strategy/VISION.md` for strategic context
+2. Read `/strategy/OKRs.md` to understand current priorities
+3. Read relevant epic from `/strategy/epics/`
+4. Read specific task from `/strategy/tasks/`
+5. Check `/strategy/adrs/` for relevant architectural decisions
+
+This ensures you have full context before making changes. ADRs prevent revisiting settled questions.
+
 ## Permissions
 
 - You may apply broad refactors if they clearly improve the codebase and are mechanically safe.
 - You may update formatting/lint config if it unblocks consistency.
 - Proactively clean up dead code, unused imports, and obvious tech debt.
 - Consolidate duplicate code when you see it.
+- You may create new ADRs in `/strategy/adrs/` when making significant architectural decisions.
+- You may break down epics into tasks in `/strategy/tasks/` proactively.
 
 ## Guardrails
 
@@ -36,6 +50,8 @@ All SHIP rules apply, plus:
 - Before coding: state plan in 3-7 bullets.
 - After coding: state what changed + how to verify (exact commands).
 - Always run tests. Add tests for new code paths.
+- When completing a task, update its status in `/strategy/tasks/`.
+- When making architectural decisions, create an ADR in `/strategy/adrs/`.
 
 ## Risk Posture
 

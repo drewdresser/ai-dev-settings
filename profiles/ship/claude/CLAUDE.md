@@ -2,12 +2,30 @@
 
 Read AGENTS.md first for the full working agreement.
 
+## Strategy-First Workflow
+
+If a `/strategy/` folder exists, read these files in order before starting work:
+
+1. `/strategy/VISION.md` — Strategic context
+2. `/strategy/OKRs.md` — Current priorities
+3. `/strategy/epics/<relevant-epic>.md` — Epic details
+4. `/strategy/tasks/<assigned-task>.md` — Specific task
+5. `/strategy/adrs/` — Relevant architectural decisions
+
+This gives you full context from strategy down to implementation. Create ADRs when making significant architectural decisions.
+
 ## Project Map
 
 <!-- Fill in your project structure -->
 
 ```
 project/
+├── strategy/         # Strategic documentation (if using workflow)
+│   ├── VISION.md
+│   ├── OKRs.md
+│   ├── epics/
+│   ├── tasks/
+│   └── adrs/
 ├── src/              # Python backend source
 │   └── ...
 ├── tests/            # Python tests
@@ -64,6 +82,8 @@ pnpm build
 - Prefer explicit types for public interfaces.
 - Add tests for new functionality.
 - Clean up code smells in files you're modifying.
+- When completing tasks, update status in `/strategy/tasks/`.
+- Create ADRs in `/strategy/adrs/` for significant architectural decisions.
 
 ## AWS Deployment Notes
 

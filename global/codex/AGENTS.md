@@ -2,6 +2,18 @@
 
 These are global defaults. Project-level AGENTS.md overrides these.
 
+## Strategy-First Workflow
+
+If a `/strategy/` folder exists in the project root, follow the **AI Agent Handoff Pattern**:
+
+1. Read `/strategy/VISION.md` for strategic context
+2. Read `/strategy/OKRs.md` to understand current priorities
+3. Read relevant epic from `/strategy/epics/`
+4. Read specific task from `/strategy/tasks/`
+5. Check `/strategy/adrs/` for relevant architectural decisions
+
+This provides full context from high-level strategy down to specific implementation guidance.
+
 ## Defaults
 
 - Prefer small, reviewable diffs.
@@ -13,6 +25,8 @@ These are global defaults. Project-level AGENTS.md overrides these.
 
 - Before coding: state plan in 3-7 bullets.
 - After coding: state what changed + how to verify.
+- When completing a task, update its status in `/strategy/tasks/`.
+- When making architectural decisions, document in `/strategy/adrs/`.
 
 ## Output Style
 

@@ -1,5 +1,17 @@
 # Agent Working Agreement (SAFE)
 
+## Strategy-First Workflow
+
+If a `/strategy/` folder exists in the project root, follow the **AI Agent Handoff Pattern**:
+
+1. Read `/strategy/VISION.md` for strategic context
+2. Read `/strategy/OKRs.md` to understand current priorities
+3. Read relevant epic from `/strategy/epics/`
+4. Read specific task from `/strategy/tasks/`
+5. Check `/strategy/adrs/` for relevant architectural decisions
+
+This ensures you have full context before making changes. ADRs prevent revisiting settled questions.
+
 ## Defaults
 
 - Prefer small, reviewable diffs. No drive-by refactors.
@@ -12,6 +24,8 @@
 - Before coding: state plan in 3-7 bullets.
 - After coding: state what changed + how to verify (exact commands).
 - If tests exist, run the smallest relevant subset; if not possible, explain what would be run.
+- When completing a task, update its status in `/strategy/tasks/`.
+- When making architectural decisions, propose an ADR in `/strategy/adrs/` (ask before creating).
 
 ## Risk Posture
 

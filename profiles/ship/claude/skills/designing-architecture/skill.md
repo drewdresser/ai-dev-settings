@@ -157,12 +157,16 @@ class PaymentProcessor:
 
 ## Architecture Decision Records (ADR)
 
+ADRs should be stored in `/strategy/adrs/` using the naming convention `###-kebab-case-title.md`.
+
+**Before making architectural decisions**, check existing ADRs to avoid revisiting settled questions.
+
 Template:
 ```markdown
 # ADR-001: [Decision Title]
 
-## Status
-[Proposed | Accepted | Deprecated | Superseded]
+**Status:** Proposed | Accepted | Deprecated | Superseded
+**Date:** YYYY-MM-DD
 
 ## Context
 [Why is this decision needed?]
@@ -171,6 +175,7 @@ Template:
 [What was decided?]
 
 ## Consequences
+
 ### Positive
 - [Benefit 1]
 - [Benefit 2]
@@ -182,6 +187,15 @@ Template:
 ### Risks
 - [Risk 1]
 ```
+
+### Workflow Integration
+
+ADRs are part of the broader strategy workflow:
+- `/strategy/VISION.md` — Strategic context
+- `/strategy/OKRs.md` — Current priorities
+- `/strategy/epics/` — Feature initiatives
+- `/strategy/tasks/` — Specific work items
+- `/strategy/adrs/` — Architectural decisions (you are here)
 
 ## Diagramming
 
