@@ -1,0 +1,37 @@
+---
+description: Rules for Python backend development
+globs: ["**/*.py", "**/pyproject.toml"]
+---
+
+# Python Backend Rules
+
+## Package Management
+
+- Use `uv` for all dependency management
+- Dependencies defined in `pyproject.toml`
+- Update dependencies proactively if beneficial
+
+## Commands
+
+```bash
+uv run pytest              # Run tests
+uv run pytest --cov        # Run with coverage
+uv run ruff check . --fix  # Lint and fix
+uv run ruff format .       # Format
+uv run ty                  # Type check
+```
+
+## Code Style
+
+- Explicit type hints required for all functions
+- Add type hints throughout files you touch
+- Use `pytest` fixtures over setup/teardown
+- Aim for high test coverage on business logic
+- Proactively refactor for clarity
+
+## AWS Lambda/ECS
+
+- Use environment variables for configuration
+- Never hardcode credentials
+- Keep handlers thin; business logic in separate modules
+- Infrastructure-as-code is required with CDK

@@ -1,0 +1,38 @@
+---
+description: Rules for React/TypeScript frontend development
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js", "**/package.json"]
+---
+
+# React Frontend Rules
+
+## Package Management
+
+- Use `pnpm` for dependency management
+- Update dependencies proactively if beneficial
+
+## Commands
+
+```bash
+pnpm dev              # Start dev server
+pnpm test             # Run tests
+pnpm test --coverage  # Run with coverage
+pnpm lint --fix       # Lint and fix
+pnpm typecheck        # Type check
+pnpm build            # Production build
+```
+
+## Code Style
+
+- TypeScript strict mode enabled
+- Functional components with hooks
+- Prefer named exports over default exports
+- Colocate tests: `Component.test.tsx` next to `Component.tsx`
+- Use React Query or similar for data fetching
+- Proactively refactor for clarity
+
+## AWS Amplify
+
+- Environment variables via Amplify console
+- Never commit `.env` files with secrets
+- Build settings in `amplify.yml`
+- Keep infrastructure in sync with application

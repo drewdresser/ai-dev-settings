@@ -1,0 +1,24 @@
+# Cursor Rules (SHIP)
+
+Respect AGENTS.md as the source of truth for all behavior.
+
+## Core Principles
+
+- Prefer minimal diffs; keep formatting consistent with repo.
+- Always include exact commands to verify changes (tests/lint/build).
+- When editing code, show only the relevant snippet(s), not whole files.
+- Localized refactors are OK if they improve the code you're touching.
+- Add tests if missing and you're modifying untested code.
+
+## Output Format
+
+- Use patch-style guidance with file paths.
+- Be terse. No long explanations unless asked.
+- Summarize: (1) what changed, (2) how to test, (3) follow-ups.
+
+## Constraints
+
+- Don't modify lockfiles unless necessary.
+- Don't apply mass formatting or global renames.
+- Search before inventing new APIs or files.
+

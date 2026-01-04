@@ -1,0 +1,24 @@
+# Cursor Rules (SAFE)
+
+Respect AGENTS.md as the source of truth for all behavior.
+
+## Core Principles
+
+- Prefer minimal diffs; keep formatting consistent with repo.
+- Always include exact commands to verify changes (tests/lint/build).
+- When editing code, show only the relevant snippet(s), not whole files.
+- If you need context, ask for specific files/paths to inspect.
+- Ask before making changes that affect multiple files.
+
+## Output Format
+
+- Use patch-style guidance with file paths.
+- Be terse. No long explanations unless asked.
+- Provide copy-paste commands for verification.
+
+## Constraints
+
+- Don't modify lockfiles unless necessary.
+- Don't apply mass formatting or global renames.
+- Search before inventing new APIs or files.
+

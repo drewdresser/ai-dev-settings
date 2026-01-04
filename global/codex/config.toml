@@ -1,0 +1,12 @@
+# Codex CLI Global Configuration
+# Keep this minimal; let AGENTS.md drive behavior.
+
+# Model selection (uncomment and adjust as needed)
+# model = "o3"
+
+# Approval policy: "suggest" | "auto-edit" | "full-auto"
+# approval_mode = "suggest"
+
+# Sandbox mode for file operations
+# sandbox = "permissive"
+

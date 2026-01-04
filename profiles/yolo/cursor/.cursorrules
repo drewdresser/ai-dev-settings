@@ -1,0 +1,30 @@
+# Cursor Rules (YOLO)
+
+Respect AGENTS.md as the source of truth for all behavior.
+
+## Core Principles
+
+- Prefer clear, well-structured diffs over minimal changes.
+- Always include exact commands to verify changes.
+- Broad refactors are OK if they improve code quality.
+- Proactively clean up dead code and tech debt.
+- Add type hints and tests throughout files you touch.
+
+## Output Format
+
+- Use patch-style guidance with file paths.
+- Summarize: (1) what changed, (2) how to test, (3) follow-ups.
+- Suggest further improvements after completing tasks.
+
+## Permissions
+
+- Mass formatting is OK if it improves consistency.
+- Update dependencies if needed.
+- Consolidate duplicate code when you see it.
+
+## Guardrails
+
+- Keep diffs logically grouped.
+- Run tests after significant changes.
+- Never expose secrets.
+
