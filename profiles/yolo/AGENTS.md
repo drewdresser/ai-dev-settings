@@ -134,6 +134,6 @@ pnpm build
 - **Frontend**: AWS Amplify (auto-deploy from main branch)
 - **Backend**: AWS Lambda (serverless) or ECS (containerized)
 - Never hardcode AWS credentials; use environment variables or IAM roles.
-- Prefer infrastructure-as-code (CDK, SAM, or Terraform).
+- Prefer infrastructure-as-code (CDK).
 - Keep infrastructure in sync with application changes.
 
