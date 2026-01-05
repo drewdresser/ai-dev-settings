@@ -20,6 +20,7 @@ This provides full context from high-level strategy down to specific implementat
 - Always provide how to verify changes (exact commands).
 - Never print secrets. Treat `.env*`, credentials, keys, tokens as sensitive.
 - When unsure about intent, make a reasonable assumption and state it.
+- **No inline imports.** All imports at the top of the file, never inside functions or conditionals.
 
 ## Dev Loop
 

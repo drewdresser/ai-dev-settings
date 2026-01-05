@@ -82,6 +82,7 @@ pnpm build
 - Prefer explicit types for public interfaces.
 - Add tests for new functionality.
 - Clean up code smells in files you're modifying.
+- **No inline imports.** All imports at the top of the file, never inside functions or conditionals.
 - When completing tasks, update status in `/strategy/tasks/`.
 - Create ADRs in `/strategy/adrs/` for significant architectural decisions.
 

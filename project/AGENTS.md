@@ -25,6 +25,7 @@ This ensures you have full context before making changes. ADRs prevent revisitin
 - Enforce typing / linting norms for touched code.
 - If introducing a new module, include a minimal docstring header.
 - Clean up obvious code smells in files you're already modifying.
+- **No inline imports.** All imports go at the top of the file. Never import inside functions, methods, or conditional blocks.
 
 ## Output Style
 
