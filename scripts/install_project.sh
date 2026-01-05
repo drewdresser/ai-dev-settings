@@ -2,9 +2,15 @@
 set -euo pipefail
 
 SETTINGS_REPO_ROOT="${1:-}"
+TARGET_DIR="${2:-}"
 
 if [[ -z "$SETTINGS_REPO_ROOT" ]]; then
-  echo "Usage: install_project.sh <settings_repo_root>"
+  echo "Usage: install_project.sh <settings_repo_root> <target_dir>"
+  exit 1
+fi
+
+if [[ -z "$TARGET_DIR" ]]; then
+  echo "Usage: install_project.sh <settings_repo_root> <target_dir>"
   exit 1
 fi
 
@@ -14,8 +20,8 @@ if [[ ! -d "$SRC" ]]; then
   exit 1
 fi
 
-# Target is current working directory (project repo)
-DST="$(pwd)"
+# Target is the directory where just was invoked from
+DST="$TARGET_DIR"
 
 copy_file() {
   local from="$1"

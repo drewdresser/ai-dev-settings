@@ -3,9 +3,9 @@ set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 default:
   @just --list
 
-# Install into the current project repo (pwd)
+# Install into the current project repo (where you ran just from)
 install:
-  ./scripts/install_project.sh "{{justfile_directory()}}"
+  ./scripts/install_project.sh "{{justfile_directory()}}" "{{invocation_directory()}}"
 
 # Symlink global configs into your home directory
 link-global:
