@@ -60,6 +60,7 @@ Each project should contain a `/strategy/` folder at its root:
 | **User Value** | Why this matters |
 | **Success Criteria** | How we know it's done |
 | **Technical Approach** | 2-4 sentences on implementation strategy |
+| **Dependencies** | Epics that must complete first; epics blocked by this one; priority level |
 | **Tasks** | List of task files in `/strategy/tasks/` that belong to this epic |
 | **Status** | `Not Started` \| `In Progress` \| `Done` |
 
@@ -73,7 +74,7 @@ Each project should contain a `/strategy/` folder at its root:
 |---------|-------------|
 | **Task** | Specific, actionable work item |
 | **Epic** | Link back to parent epic |
-| **Estimate** | Rough time estimate |
+| **Size** | T-shirt size: `S` \| `M` \| `L` \| `XL` |
 | **Acceptance Criteria** | Specific requirements for done |
 | **Technical Notes** | Any constraints, approaches, or context for the AI agent |
 | **Status** | `Todo` \| `In Progress` \| `Done` |
@@ -242,6 +243,12 @@ This sequence provides agents with full context: from high-level strategy down t
 
 [2-4 sentences on implementation strategy]
 
+## Dependencies
+
+- **Depends on**: [List epics that must complete first, or "None"]
+- **Blocks**: [List epics that depend on this one, or "None"]
+- **Priority**: `High` | `Medium` | `Low`
+
 ## Tasks
 
 - [ ] [epic-name-001-description.md](../tasks/epic-name-001-description.md)
@@ -258,7 +265,7 @@ This sequence provides agents with full context: from high-level strategy down t
 # Task: [Task Title]
 
 **Epic:** [epic-name.md](../epics/epic-name.md)  
-**Estimate:** [X hours/days]  
+**Size:** `S` | `M` | `L` | `XL`  
 **Status:** `Todo` | `In Progress` | `Done`
 
 ## Acceptance Criteria
