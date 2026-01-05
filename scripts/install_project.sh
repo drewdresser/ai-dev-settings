@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROFILE="${1:-ship}"
-SETTINGS_REPO_ROOT="${2:-}"
+SETTINGS_REPO_ROOT="${1:-}"
 
 if [[ -z "$SETTINGS_REPO_ROOT" ]]; then
-  echo "Usage: install_project.sh <profile> <settings_repo_root>"
+  echo "Usage: install_project.sh <settings_repo_root>"
   exit 1
 fi
 
-SRC="$SETTINGS_REPO_ROOT/profiles/$PROFILE"
+SRC="$SETTINGS_REPO_ROOT/project"
 if [[ ! -d "$SRC" ]]; then
-  echo "Unknown profile: $PROFILE (expected $SRC to exist)"
+  echo "Project source not found: $SRC"
   exit 1
 fi
 
@@ -26,7 +25,7 @@ copy_file() {
   echo "  Copied: $to"
 }
 
-echo "Installing profile '$PROFILE' into: $DST"
+echo "Installing project config into: $DST"
 echo ""
 
 # Shared truth (AGENTS.md)
@@ -40,8 +39,47 @@ if [[ -d "$SRC/claude" ]]; then
   if [[ -f "$SRC/claude/CLAUDE.md" ]]; then
     copy_file "$SRC/claude/CLAUDE.md" "$DST/CLAUDE.md"
   fi
-  if [[ -f "$SRC/claude/.claude/settings.json" ]]; then
-    copy_file "$SRC/claude/.claude/settings.json" "$DST/.claude/settings.json"
+  
+  # Copy agents
+  if [[ -d "$SRC/claude/agents" ]]; then
+    for agent in "$SRC/claude/agents/"*.md; do
+      if [[ -f "$agent" ]]; then
+        copy_file "$agent" "$DST/.claude/agents/$(basename "$agent")"
+      fi
+    done
+  fi
+  
+  # Copy commands
+  if [[ -d "$SRC/claude/commands" ]]; then
+    for cmd in "$SRC/claude/commands/"*.md; do
+      if [[ -f "$cmd" ]]; then
+        copy_file "$cmd" "$DST/.claude/commands/$(basename "$cmd")"
+      fi
+    done
+  fi
+  
+  # Copy hooks
+  if [[ -f "$SRC/claude/hooks/hooks.json" ]]; then
+    copy_file "$SRC/claude/hooks/hooks.json" "$DST/.claude/hooks/hooks.json"
+  fi
+  if [[ -d "$SRC/claude/hooks/scripts" ]]; then
+    for script in "$SRC/claude/hooks/scripts/"*.sh; do
+      if [[ -f "$script" ]]; then
+        copy_file "$script" "$DST/.claude/hooks/scripts/$(basename "$script")"
+      fi
+    done
+  fi
+  
+  # Copy skills
+  if [[ -d "$SRC/claude/skills" ]]; then
+    for skill_dir in "$SRC/claude/skills/"*/; do
+      if [[ -d "$skill_dir" ]]; then
+        skill_name=$(basename "$skill_dir")
+        if [[ -f "$skill_dir/skill.md" ]]; then
+          copy_file "$skill_dir/skill.md" "$DST/.claude/skills/$skill_name/skill.md"
+        fi
+      fi
+    done
   fi
 fi
 
@@ -73,8 +111,10 @@ echo ""
 echo "Files to commit:"
 echo "  - AGENTS.md"
 echo "  - CLAUDE.md"
-echo "  - .claude/settings.json"
+echo "  - .claude/agents/*.md"
+echo "  - .claude/commands/*.md"
+echo "  - .claude/hooks/"
+echo "  - .claude/skills/"
 echo "  - .cursorrules"
 echo "  - .cursor/rules/*.mdc"
 echo "  - .cursor/commands/*.md"
-

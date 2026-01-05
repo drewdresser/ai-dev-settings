@@ -3,7 +3,7 @@
 Personal, versioned configuration for AI coding tools:
 
 - **AGENTS.md** (shared truth): Codex + Cursor (+ referenced by Claude)
-- **Claude Code**: CLAUDE.md + .claude/settings.json
+- **Claude Code**: CLAUDE.md + agents, commands, hooks, skills
 - **Cursor**: .cursorrules + .cursor/rules/*.mdc + reusable command prompts
 - **Codex**: Global config + AGENTS.md
 - **Workflow**: Multi-project AI agent development framework (see [docs/WORKFLOW.md](docs/WORKFLOW.md))
@@ -16,10 +16,10 @@ From inside your target project directory:
 
 ```bash
 # Using just (recommended)
-just -f /path/to/ai-dev-settings/justfile install ship
+just -f /path/to/ai-dev-settings/justfile install
 
 # Or directly with the script
-/path/to/ai-dev-settings/scripts/install_project.sh ship /path/to/ai-dev-settings
+/path/to/ai-dev-settings/scripts/install_project.sh /path/to/ai-dev-settings
 ```
 
 ### Link global configs
@@ -34,17 +34,9 @@ This symlinks global configs into:
 - `~/.codex/config.toml`
 - `~/.claude/settings.json`
 
-## Profiles
-
-| Profile | Risk Posture | Refactors | Tests |
-|---------|--------------|-----------|-------|
-| **safe** | Conservative, ask before changing | Only if explicit | Run existing |
-| **ship** | Pragmatic, localized changes OK | If reduces risk | Add if missing |
-| **yolo** | Assertive, broad changes allowed | Proactive cleanup | Required |
-
 ## Workflow Framework
 
-All profiles incorporate the **Multi-Project AI Agent Development Framework** — a structured approach for managing AI-driven development across multiple projects.
+This repo incorporates the **Multi-Project AI Agent Development Framework** — a structured approach for managing AI-driven development across multiple projects.
 
 **Key concepts:**
 - `/strategy/` folder in each project root for strategic documentation
@@ -53,30 +45,6 @@ All profiles incorporate the **Multi-Project AI Agent Development Framework** �
 - Agent-first context consumption pattern
 
 See [docs/WORKFLOW.md](docs/WORKFLOW.md) for the complete framework specification.
-
-### safe
-
-Best for: Late-night PRs, unfamiliar codebases, production hotfixes.
-
-- Minimal diffs, no drive-by refactors
-- Ask before multi-file changes
-- Never modify lockfiles
-
-### ship
-
-Best for: Day-to-day development, feature work.
-
-- Localized refactors are OK
-- Add tests if missing
-- Clean up code smells in touched files
-
-### yolo
-
-Best for: Tech debt cleanup, greenfield projects, major refactors.
-
-- Broad refactors encouraged
-- Proactively add type hints and tests
-- Suggest further improvements
 
 ## Stack Configuration
 
@@ -103,26 +71,14 @@ ai-dev-settings/
 ├── justfile
 ├── docs/
 │   └── WORKFLOW.md            # Multi-project AI workflow framework
-├── profiles/
-│   ├── safe/
-│   │   ├── AGENTS.md
-│   │   ├── claude/
-│   │   │   ├── CLAUDE.md
-│   │   │   └── .claude/settings.json
-│   │   └── cursor/
-│   │       ├── .cursorrules
-│   │       └── .cursor/
-│   │           ├── rules/
-│   │           │   ├── python-backend.mdc
-│   │           │   └── react-frontend.mdc
-│   │           └── commands/
-│   │               ├── plan.md
-│   │               ├── patch.md
-│   │               └── test.md
-│   ├── ship/
-│   │   └── ... (same structure)
-│   └── yolo/
-│       └── ... (same structure)
+├── project/                   # Files to install into projects
+│   ├── AGENTS.md
+│   └── claude/
+│       ├── CLAUDE.md
+│       ├── agents/            # Specialized agent definitions
+│       ├── commands/          # Reusable command templates
+│       ├── hooks/             # Event hooks and scripts
+│       └── skills/            # Skill definitions
 ├── global/
 │   ├── codex/
 │   │   ├── AGENTS.md
@@ -151,18 +107,26 @@ your-project/
 │       └── 001-decision.md    # Architecture decisions
 ├── AGENTS.md
 ├── CLAUDE.md
+├── .claude/
+│   ├── agents/
+│   ├── commands/
+│   ├── hooks/
+│   └── skills/
 └── ... (rest of project)
 ```
 
 ## What Gets Installed
 
-When you run `just install <profile>`, these files are copied to your project:
+When you run `just install`, these files are copied to your project:
 
 | File | Tool | Purpose |
 |------|------|---------|
 | `AGENTS.md` | Codex, Cursor | Universal behavior contract |
 | `CLAUDE.md` | Claude Code | Project-specific instructions |
-| `.claude/settings.json` | Claude Code | Permissions and hooks |
+| `.claude/agents/*.md` | Claude Code | Specialized agent definitions |
+| `.claude/commands/*.md` | Claude Code | Reusable command templates |
+| `.claude/hooks/` | Claude Code | Event hooks and scripts |
+| `.claude/skills/` | Claude Code | Skill definitions |
 | `.cursorrules` | Cursor | IDE-level behavior |
 | `.cursor/rules/*.mdc` | Cursor | Stack-specific rules |
 | `.cursor/commands/*.md` | Cursor | Reusable prompt templates |
@@ -186,4 +150,3 @@ Inspired by:
 - [fcakyon/claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)
 - [yixin0829/ai-coding-templates](https://github.com/yixin0829/ai-coding-templates)
 - [inmve/awesome-ai-coding-techniques](https://github.com/inmve/coding-with-ai)
-
