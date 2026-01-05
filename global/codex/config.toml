@@ -2,11 +2,13 @@
 # Keep this minimal; let AGENTS.md drive behavior.
 
 # Model selection (uncomment and adjust as needed)
-# model = "o3"
+model = "gpt-5.2-codex"
+model_reasoning_effort = "high"
+tool_output_token_limit = 25000
 
-# Approval policy: "suggest" | "auto-edit" | "full-auto"
-# approval_mode = "suggest"
-
-# Sandbox mode for file operations
-# sandbox = "permissive"
-
+[features]
+unified_exec = true
+apply_patch_freeform = true
+web_search_request = true
+skills = true
+shell_snapshot = true
