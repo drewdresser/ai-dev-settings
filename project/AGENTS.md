@@ -92,6 +92,25 @@ uv run ty
 - Use `pytest` fixtures over setup/teardown.
 - Add type hints to functions you modify.
 
+### Standalone Scripts (PEP 723)
+
+For one-off operations, data processing, or utility tasks, write Python scripts with inline dependencies:
+
+```python
+# /// script
+# dependencies = ["requests", "pandas"]
+# ///
+import requests
+import pandas as pd
+# ... script code
+```
+
+Run with: `uv run scripts/my_script.py`
+
+- Store all standalone scripts in `scripts/` folder
+- Use inline dependencies—don't modify pyproject.toml for scripts
+- Great for migrations, data checks, debugging, one-time tasks
+
 ---
 
 ## Stack: React Frontend

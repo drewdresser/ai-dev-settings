@@ -55,7 +55,27 @@ uv run ruff format .
 
 # Type check
 uv run ty
+
+# Run standalone script
+uv run scripts/my_script.py
 ```
+
+#### Standalone Scripts (PEP 723)
+
+For one-off tasks, data processing, or utility operations, write scripts with inline dependencies:
+
+```python
+# /// script
+# dependencies = ["requests", "pandas"]
+# ///
+import requests
+import pandas as pd
+# ... script code
+```
+
+- Store scripts in `scripts/` folder
+- Use inline dependencies instead of modifying pyproject.toml
+- Ideal for migrations, data checks, debugging, one-time operations
 
 ### React Frontend
 

@@ -45,6 +45,25 @@ uv run ruff check .    # Lint
 uv run ruff format .   # Format
 ```
 
+#### Standalone Scripts (PEP 723)
+
+For one-off scripts, data processing, or utility tasks, use PEP 723 inline script metadata with `uv`:
+
+```python
+# /// script
+# dependencies = ["requests", "pandas"]
+# ///
+import requests
+import pandas as pd
+# ... script code
+```
+
+Run with: `uv run scripts/my_script.py`
+
+- Store scripts in `scripts/` folder
+- Use inline dependencies instead of modifying project pyproject.toml
+- Useful for migrations, data checks, one-time operations
+
 ### TypeScript/React
 
 ```bash
