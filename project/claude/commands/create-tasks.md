@@ -12,7 +12,7 @@ allowed-tools:
 
 # Create Tasks Command
 
-Act as an **expert product manager** to break down an epic into well-scoped, actionable tasks that developers (or AI agents) can execute independently.
+Act as an **expert product manager** to break down an epic into well-scoped, actionable tasks that developers (or AI agents) can execute independently. Use the AskUserQuestion tool for any details that need to be filled in about the Tasks you'd like to create.
 
 ## When to Use
 
@@ -50,6 +50,9 @@ Load the full context hierarchy:
 
 # Current priorities
 /strategy/OKRs.md
+
+# Project status and work order
+/strategy/EPICS.md
 
 # Target epic
 /strategy/epics/<epic-name>.md
@@ -222,7 +225,17 @@ Add task links to the parent epic's Tasks section:
 
 Update epic status to `In Progress` if it was `Not Started`.
 
-### 10. Generate Summary
+### 10. Update EPICS.md
+
+If the epic status changed (e.g., from `Not Started` to `In Progress`), update `/strategy/EPICS.md`:
+
+1. **Update the Epic Summary table** — Change the status column for this epic
+2. **Update Progress Summary** — Adjust counts (decrement Not Started, increment In Progress)
+3. **Update What to Work on Next** — If this epic was the recommended next work, suggest the next available epic
+
+This keeps EPICS.md as the single source of truth for project status.
+
+### 11. Generate Summary
 
 Output a clear summary:
 

@@ -6,11 +6,12 @@ If a `/strategy/` folder exists in the project root, follow the **AI Agent Hando
 
 1. Read `/strategy/VISION.md` for strategic context
 2. Read `/strategy/OKRs.md` to understand current priorities
-3. Read relevant epic from `/strategy/epics/`
-4. Read specific task from `/strategy/tasks/`
-5. Check `/strategy/adrs/` for relevant architectural decisions
+3. Read `/strategy/EPICS.md` to see project status, work order, and what to work on next
+4. Read relevant epic from `/strategy/epics/`
+5. Read specific task from `/strategy/tasks/`
+6. Check `/strategy/adrs/` for relevant architectural decisions
 
-This ensures you have full context before making changes. ADRs prevent revisiting settled questions.
+This ensures you have full context before making changes. The `EPICS.md` file is especially helpful when no specific task is assigned—it shows project status at a glance and recommends the next piece of work. ADRs prevent revisiting settled questions.
 
 ## Bias to Shipping
 
@@ -48,6 +49,7 @@ This ensures you have full context before making changes. ADRs prevent revisitin
 - Run the smallest relevant test subset. Add tests if coverage is missing.
 - When completing a task, update its status in `/strategy/tasks/`.
 - When making architectural decisions, create an ADR in `/strategy/adrs/`.
+- ALWAYS use #context7 MCP Server to read relevant documentation. Do this every time you are working with a language, framework, library etc. Never assume that you know the answer as these things change frequently. Your training date is in the past so your knowledge is likely out of date, even if it is a technology you are familiar with.
 
 ## Risk Posture
 

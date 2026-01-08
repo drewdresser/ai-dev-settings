@@ -49,13 +49,18 @@ Extract and understand:
 Check for existing epics and their status:
 
 ```bash
-# List existing epics
+# Check EPICS.md for current state (preferred - single source of truth)
+/strategy/EPICS.md
+
+# Or list existing epics
 ls /strategy/epics/
 
 # For each epic, check status
 grep -l "Status.*Done" /strategy/epics/*.md
 grep -l "Status.*In Progress" /strategy/epics/*.md
 ```
+
+If EPICS.md exists, use it as the primary source for understanding project status, work order, and what's been completed.
 
 **If in-progress epics exist**: Ask user if they want to continue those or create new ones.
 
@@ -156,6 +161,89 @@ Add links to the newly created epics in `/strategy/OKRs.md`:
 **Related Epics:** [epic-name.md](epics/epic-name.md), [another-epic.md](epics/another-epic.md)
 ```
 
+### 9. Create or Update EPICS.md
+
+Create or update `/strategy/EPICS.md` as the centralized dashboard for all epics:
+
+```markdown
+# Epics Overview
+
+## Epic Summary
+
+| Epic | OKR Alignment | Priority | Dependencies | Status |
+|------|---------------|----------|--------------|--------|
+| [epic-name.md](epics/epic-name.md) | O1/KR1 | High | None (foundational) | Not Started |
+| [another-epic.md](epics/another-epic.md) | O1/KR2, O2/KR1 | Medium | epic-name | Not Started |
+
+---
+
+## Recommended Work Order
+
+```
+Phase 1 (Foundation):
+  └── epic-name ─────────────────────────┐
+                                         │
+Phase 2 (Core Features):                 │
+  └── another-epic ◄─────────────────────┘
+```
+
+### Phase Details
+
+**Phase 1 — Foundation**
+- **epic-name**: [Brief description of purpose and why it's foundational]
+
+**Phase 2 — Core Features**
+- **another-epic**: [Brief description]. Requires epic-name to complete first.
+
+---
+
+## Progress Summary
+
+| Status | Count | Epics |
+|--------|-------|-------|
+| Done | 0 | — |
+| In Progress | 0 | — |
+| Not Started | X | [list of epics] |
+
+---
+
+## What to Work on Next
+
+### Recommended: `epic-name`
+
+**Why this epic?**
+- [Priority and OKR alignment rationale]
+- [No blockers / unblocks other work]
+- [Brief value statement]
+
+**Epic file:** [epic-name.md](epics/epic-name.md)
+
+---
+
+## Risk Areas
+
+- **[Risk area]**: [Description and mitigation strategy]
+
+---
+
+## Not Planned (and why)
+
+| Idea | Reason |
+|------|--------|
+| [Rejected feature] | [Reason - e.g., violates non-goals, out of scope] |
+```
+
+**Key Sections:**
+
+1. **Epic Summary Table** — All epics at a glance with status, priority, dependencies
+2. **Recommended Work Order** — Visual dependency graph showing execution phases
+3. **Progress Summary** — Quick counts by status
+4. **What to Work on Next** — Clear recommendation with rationale
+5. **Risk Areas** — Known concerns
+6. **Not Planned** — Ideas considered but rejected (prevents revisiting)
+
+This file becomes the **single source of truth** for project status and work order.
+
 ## Output Summary
 
 After creating epics, provide:
@@ -167,6 +255,11 @@ After creating epics, provide:
 |------|---------------|----------|--------------|
 | [epic-name.md](epics/epic-name.md) | O1/KR2 | High | None |
 | [another-epic.md](epics/another-epic.md) | O2/KR1 | Medium | Depends on epic-name |
+
+## Files Updated
+
+- Created/Updated: `/strategy/EPICS.md` — Centralized epic dashboard
+- Updated: `/strategy/OKRs.md` — Added epic links
 
 ## Recommended Work Order
 
@@ -183,7 +276,7 @@ After creating epics, provide:
 - [Idea that was considered but rejected]: [Reason - e.g., violates non-goals]
 ```
 
-**Note**: All dependencies are persisted in each epic's Dependencies section, making work order clear for future reference.
+**Note**: All dependencies are persisted in each epic's Dependencies section and in EPICS.md, making work order clear for future reference. EPICS.md serves as the single source of truth for project status.
 
 ## Guidelines
 
@@ -217,14 +310,15 @@ Use kebab-case with user-facing outcome:
 
 **Agent**:
 1. Reads VISION.md and OKRs.md
-2. Checks existing epics - finds 2 marked Done, 0 in progress
+2. Checks existing epics and EPICS.md - finds 2 marked Done, 0 in progress
 3. Reviews 3 ADRs for constraints
 4. Explores codebase structure
 5. Proposes 3 new epics aligned to Q1 OKRs
 6. Analyzes dependencies and assigns priorities
 7. Writes epic files with Dependencies section populated
 8. Updates OKRs.md with epic links
-9. Outputs summary with recommended work order
+9. Creates/updates EPICS.md with full epic dashboard
+10. Outputs summary with recommended work order
 
 ## Error Handling
 

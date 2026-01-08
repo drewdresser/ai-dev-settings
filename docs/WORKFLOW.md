@@ -12,6 +12,7 @@ Each project should contain a `/strategy/` folder at its root:
 /strategy/
   VISION.md
   OKRs.md
+  EPICS.md
   
   /epics/
     epic-name.md
@@ -47,6 +48,24 @@ Each project should contain a `/strategy/` folder at its root:
 - Quarterly objectives (1-3 max)
 - Each with 2-4 key results (measurable, time-bound)
 - Links to relevant epics implementing them
+
+### `/strategy/EPICS.md` — Epics Overview & Work Order
+
+A centralized dashboard for all epics in the project. This file provides:
+
+| Section | Description |
+|---------|-------------|
+| **Epic Summary Table** | All epics with OKR alignment, priority, dependencies, and status at a glance |
+| **Recommended Work Order** | Visual dependency graph and phased execution plan |
+| **Progress Summary** | Counts by status (Done, In Progress, Not Started) |
+| **What to Work on Next** | Recommended next epic with rationale |
+| **Risk Areas** | Known concerns or uncertainties |
+| **Not Planned** | Ideas considered but rejected, with reasons |
+
+This file is the **single source of truth** for understanding project status and deciding what to work on next. It should be updated whenever:
+- A new epic is created
+- An epic's status changes (Not Started → In Progress → Done)
+- Dependencies or priorities change
 
 ---
 
@@ -101,11 +120,12 @@ When starting work on a project, agents should read files in this order:
 
 1. **`/strategy/VISION.md`** — Strategic context
 2. **`/strategy/OKRs.md`** — Current priorities
-3. **`/strategy/epics/<relevant-epic>.md`** — Epic details
-4. **`/strategy/tasks/<assigned-task>.md`** — Specific task
-5. **`/strategy/adrs/`** — Relevant architectural decisions
+3. **`/strategy/EPICS.md`** — Project status, work order, and next recommended epic
+4. **`/strategy/epics/<relevant-epic>.md`** — Epic details
+5. **`/strategy/tasks/<assigned-task>.md`** — Specific task
+6. **`/strategy/adrs/`** — Relevant architectural decisions
 
-This sequence provides agents with full context: from high-level strategy down to specific implementation guidance.
+This sequence provides agents with full context: from high-level strategy down to specific implementation guidance. The EPICS.md file is particularly useful for understanding what to work on next when no specific task is assigned.
 
 ---
 
@@ -222,6 +242,81 @@ This sequence provides agents with full context: from high-level strategy down t
 - [ ] KR2: [Measurable key result]
 
 **Related Epics:** [another-epic.md](epics/another-epic.md)
+```
+
+### EPICS.md Template
+
+```markdown
+# Epics Overview
+
+## Epic Summary
+
+| Epic | OKR Alignment | Priority | Dependencies | Status |
+|------|---------------|----------|--------------|--------|
+| [epic-name.md](epics/epic-name.md) | O1/KR1 | High | None (foundational) | Not Started |
+| [another-epic.md](epics/another-epic.md) | O1/KR2, O2/KR1 | Medium | epic-name | Not Started |
+
+---
+
+## Recommended Work Order
+
+```
+Phase 1 (Foundation):
+  └── epic-name ─────────────────────────┐
+                                         │
+Phase 2 (Core Features):                 │
+  ├── another-epic ◄─────────────────────┤ (needs epic-name)
+  └── parallel-epic ◄────────────────────┘ (no blockers)
+                                         │
+Phase 3 (Polish):                        │
+  └── final-epic ◄───────────────────────┘ (needs another-epic)
+```
+
+### Phase Details
+
+**Phase 1 — Foundation**
+- **epic-name**: No dependencies. [Brief description of what this epic accomplishes]
+
+**Phase 2 — Core Features** (can parallelize some)
+- **another-epic**: [Brief description]. Requires epic-name to be complete.
+- **parallel-epic**: [Brief description]. Can start in parallel.
+
+---
+
+## Progress Summary
+
+| Status | Count | Epics |
+|--------|-------|-------|
+| Done | 0 | — |
+| In Progress | 0 | — |
+| Not Started | 2 | epic-name, another-epic |
+
+---
+
+## What to Work on Next
+
+### Recommended: `epic-name`
+
+**Why this epic?**
+- [Priority and OKR alignment rationale]
+- [No blockers / unblocks other work]
+- [Brief value statement]
+
+**Epic file:** [epic-name.md](epics/epic-name.md)
+
+---
+
+## Risk Areas
+
+- **[Risk area]**: [Description and mitigation strategy]
+
+---
+
+## Not Planned (and why)
+
+| Idea | Reason |
+|------|--------|
+| [Rejected feature] | [Reason - e.g., violates non-goals, out of scope] |
 ```
 
 ### Epic Template

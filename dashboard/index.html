@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy Dashboard</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .refresh-info {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .refresh-info .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #334155;
+            border-radius: 0.375rem;
+            background: #1e293b;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.15s;
+        }
+
+        .btn:hover {
+            background: #334155;
+        }
+
+        .btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #334155;
+            border-radius: 0.375rem;
+            background: #1e293b;
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            width: 200px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .search-input::placeholder {
+            color: #64748b;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: #94a3b8;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        /* Kanban Board */
+        .kanban {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .column {
+            background: #1e293b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid;
+        }
+
+        .column-header h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .column-count {
+            background: #334155;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+        }
+
+        .column.not-started .column-header { border-color: #64748b; }
+        .column.in-progress .column-header { border-color: #f59e0b; }
+        .column.done .column-header { border-color: #22c55e; }
+
+        .column-cards {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* Cards */
+        .card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .card:hover {
+            border-color: #475569;
+        }
+
+        .card.expanded {
+            border-color: #3b82f6;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.625rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .badge-project {
+            background: #1e3a5f;
+            color: #60a5fa;
+        }
+
+        .badge-size {
+            background: #365314;
+            color: #84cc16;
+        }
+
+        .badge-size.s { background: #365314; color: #84cc16; }
+        .badge-size.m { background: #3f3f00; color: #facc15; }
+        .badge-size.l { background: #7c2d12; color: #fb923c; }
+        .badge-size.xl { background: #7f1d1d; color: #f87171; }
+
+        .badge-priority {
+            background: #4c1d95;
+            color: #c4b5fd;
+        }
+
+        .card-progress {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #334155;
+            border-radius: 2px;
+            margin-top: 0.25rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #22c55e;
+            transition: width 0.3s;
+        }
+
+        /* Expanded Card Details */
+        .card-details {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #334155;
+            font-size: 0.8125rem;
+        }
+
+        .card-details-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.375rem;
+            color: #94a3b8;
+        }
+
+        .card-details-row strong {
+            color: #cbd5e1;
+            min-width: 60px;
+        }
+
+        .card-details-row a {
+            color: #60a5fa;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .card-details-row a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tasks by Epic View */
+        .tasks-by-epic {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .epic-group {
+            background: #1e293b;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .epic-group-header {
+            padding: 1rem;
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .epic-group-header:hover {
+            background: #1a2744;
+        }
+
+        .epic-group-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .epic-group-title .chevron {
+            transition: transform 0.2s;
+            color: #64748b;
+        }
+
+        .epic-group-title .chevron.expanded {
+            transform: rotate(90deg);
+        }
+
+        .epic-group-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8125rem;
+            color: #94a3b8;
+        }
+
+        .epic-group-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .task-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .task-column-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #64748b;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .task-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.375rem;
+            padding: 0.625rem;
+            font-size: 0.8125rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .task-item .checkbox {
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .task-item.done .checkbox {
+            color: #22c55e;
+        }
+
+        .task-item .task-info {
+            flex: 1;
+        }
+
+        .task-item .task-title {
+            line-height: 1.3;
+        }
+
+        .task-item .task-size {
+            font-size: 0.625rem;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.125rem;
+            margin-left: 0.25rem;
+        }
+
+        /* Vision & OKRs Panel */
+        .strategy-panel {
+            background: #1e293b;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .strategy-header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+        }
+
+        .strategy-header:hover {
+            background: #263548;
+            border-radius: 0.5rem;
+        }
+
+        .strategy-header.expanded {
+            border-bottom-color: #334155;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+        .strategy-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strategy-header .chevron {
+            transition: transform 0.2s;
+            color: #64748b;
+        }
+
+        .strategy-header .chevron.expanded {
+            transform: rotate(90deg);
+        }
+
+        .strategy-content {
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .strategy-section {
+            background: #0f172a;
+            border-radius: 0.375rem;
+            padding: 1rem;
+        }
+
+        .strategy-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .strategy-section .north-star {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #f8fafc;
+            line-height: 1.4;
+        }
+
+        .strategy-section ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .strategy-section li {
+            font-size: 0.8125rem;
+            color: #cbd5e1;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .strategy-section li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #64748b;
+        }
+
+        .okr-objective {
+            margin-bottom: 1rem;
+        }
+
+        .okr-objective:last-child {
+            margin-bottom: 0;
+        }
+
+        .okr-objective-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #f8fafc;
+            margin-bottom: 0.25rem;
+        }
+
+        .okr-objective-intent {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .okr-kr {
+            font-size: 0.8125rem;
+            color: #cbd5e1;
+            padding: 0.375rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .okr-kr .kr-id {
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        /* Loading & Error */
+        .loading, .error {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            color: #94a3b8;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .kanban {
+                grid-template-columns: 1fr;
+            }
+            .column {
+                max-height: 400px;
+            }
+            .strategy-content {
+                grid-template-columns: 1fr;
+            }
+            .epic-group-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" x-data="dashboard()">
+        <header>
+            <h1>Strategy Dashboard</h1>
+            <div class="refresh-info" x-show="data">
+                <span class="dot"></span>
+                <span x-text="'Updated ' + formatTime(data?.refreshedAt)"></span>
+            </div>
+        </header>
+
+        <!-- Strategy Panel (Vision & OKRs) -->
+        <template x-if="selectedProject !== 'all' && getSelectedProjectData()">
+            <div class="strategy-panel">
+                <div class="strategy-header" :class="{ expanded: strategyExpanded }" @click="strategyExpanded = !strategyExpanded">
+                    <h2>
+                        <span class="chevron" :class="{ expanded: strategyExpanded }">▶</span>
+                        Strategy: <span x-text="getSelectedProjectData()?.name"></span>
+                    </h2>
+                </div>
+                <div class="strategy-content" x-show="strategyExpanded" x-collapse>
+                    <!-- Vision -->
+                    <div class="strategy-section" x-show="getSelectedProjectData()?.vision?.north_star">
+                        <h3>North Star</h3>
+                        <p class="north-star" x-text="getSelectedProjectData()?.vision?.north_star"></p>
+                    </div>
+
+                    <!-- Mission -->
+                    <div class="strategy-section" x-show="getSelectedProjectData()?.vision?.mission?.length">
+                        <h3>Mission</h3>
+                        <ul>
+                            <template x-for="item in getSelectedProjectData()?.vision?.mission || []">
+                                <li x-text="item"></li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <!-- Strategic Bets -->
+                    <div class="strategy-section" x-show="getSelectedProjectData()?.vision?.strategic_bets?.length">
+                        <h3>Strategic Bets</h3>
+                        <ul>
+                            <template x-for="item in getSelectedProjectData()?.vision?.strategic_bets || []">
+                                <li x-text="item"></li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <!-- OKRs -->
+                    <div class="strategy-section" x-show="getSelectedProjectData()?.okrs?.length">
+                        <h3>OKRs</h3>
+                        <template x-for="obj in getSelectedProjectData()?.okrs || []">
+                            <div class="okr-objective">
+                                <div class="okr-objective-title" x-text="obj.id + ': ' + obj.title"></div>
+                                <div class="okr-objective-intent" x-show="obj.intent" x-text="obj.intent"></div>
+                                <template x-for="kr in obj.key_results || []">
+                                    <div class="okr-kr">
+                                        <span class="kr-id" x-text="kr.id"></span>
+                                        <span x-text="kr.text"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="control-group">
+                <span class="control-label">View:</span>
+                <button class="btn" :class="{ active: view === 'epics' }" @click="view = 'epics'">Epics</button>
+                <button class="btn" :class="{ active: view === 'tasks' }" @click="view = 'tasks'">Tasks</button>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">Project:</span>
+                <button class="btn" :class="{ active: selectedProject === 'all' }" @click="selectedProject = 'all'">All</button>
+                <template x-for="project in data?.projects || []" :key="project.id">
+                    <button class="btn" :class="{ active: selectedProject === project.id }" @click="selectedProject = project.id" x-text="project.name"></button>
+                </template>
+            </div>
+
+            <div class="control-group" style="margin-left: auto;">
+                <input type="text" class="search-input" placeholder="Search..." x-model="search" />
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats" x-show="data">
+            <template x-if="view === 'epics'">
+                <template x-for="_ in [1]">
+                    <div style="display: contents;">
+                        <div>
+                            <span class="stat-value" x-text="filteredEpics.length"></span> epics
+                        </div>
+                        <div>
+                            <span class="stat-value" x-text="countEpicsByStatus('Not Started')"></span> not started
+                        </div>
+                        <div>
+                            <span class="stat-value" x-text="countEpicsByStatus('In Progress')"></span> in progress
+                        </div>
+                        <div>
+                            <span class="stat-value" x-text="countEpicsByStatus('Done')"></span> done
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template x-if="view === 'tasks'">
+                <template x-for="_ in [1]">
+                    <div style="display: contents;">
+                        <div>
+                            <span class="stat-value" x-text="filteredTasks.length"></span> tasks
+                        </div>
+                        <div>
+                            <span class="stat-value" x-text="countTasksByStatus('Todo')"></span> todo
+                        </div>
+                        <div>
+                            <span class="stat-value" x-text="countTasksByStatus('Done')"></span> done
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" x-show="loading">Loading...</div>
+
+        <!-- Error -->
+        <div class="error" x-show="error" x-text="error"></div>
+
+        <!-- Epics Kanban Board -->
+        <div class="kanban" x-show="data && !loading && view === 'epics'">
+            <!-- Not Started Column -->
+            <div class="column not-started">
+                <div class="column-header">
+                    <h2>Not Started</h2>
+                    <span class="column-count" x-text="countEpicsByStatus('Not Started')"></span>
+                </div>
+                <div class="column-cards">
+                    <template x-for="item in getEpicsByStatus('Not Started')" :key="item.id + item.project">
+                        <div class="card" :class="{ expanded: expandedId === item.id }" @click="toggleExpand(item.id)">
+                            <div class="card-header">
+                                <span class="card-title" x-text="item.title"></span>
+                            </div>
+                            <div class="card-meta">
+                                <span class="badge badge-project" x-text="getProjectName(item.project)"></span>
+                                <template x-if="item.priority">
+                                    <span class="badge badge-priority" x-text="item.priority"></span>
+                                </template>
+                            </div>
+                            <template x-if="item.task_count > 0">
+                                <div class="card-progress">
+                                    <span x-text="item.completed_tasks + '/' + item.task_count + ' tasks'"></span>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" :style="'width: ' + (item.completed_tasks / item.task_count * 100) + '%'"></div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template x-if="expandedId === item.id">
+                                <div class="card-details">
+                                    <div class="card-details-row">
+                                        <strong>ID:</strong>
+                                        <span x-text="item.id"></span>
+                                    </div>
+                                    <div class="card-details-row">
+                                        <strong>File:</strong>
+                                        <a :href="'file://' + item.file_path" x-text="item.file_path.split('/').slice(-3).join('/')"></a>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="column in-progress">
+                <div class="column-header">
+                    <h2>In Progress</h2>
+                    <span class="column-count" x-text="countEpicsByStatus('In Progress')"></span>
+                </div>
+                <div class="column-cards">
+                    <template x-for="item in getEpicsByStatus('In Progress')" :key="item.id + item.project">
+                        <div class="card" :class="{ expanded: expandedId === item.id }" @click="toggleExpand(item.id)">
+                            <div class="card-header">
+                                <span class="card-title" x-text="item.title"></span>
+                            </div>
+                            <div class="card-meta">
+                                <span class="badge badge-project" x-text="getProjectName(item.project)"></span>
+                                <template x-if="item.priority">
+                                    <span class="badge badge-priority" x-text="item.priority"></span>
+                                </template>
+                            </div>
+                            <template x-if="item.task_count > 0">
+                                <div class="card-progress">
+                                    <span x-text="item.completed_tasks + '/' + item.task_count + ' tasks'"></span>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" :style="'width: ' + (item.completed_tasks / item.task_count * 100) + '%'"></div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template x-if="expandedId === item.id">
+                                <div class="card-details">
+                                    <div class="card-details-row">
+                                        <strong>ID:</strong>
+                                        <span x-text="item.id"></span>
+                                    </div>
+                                    <div class="card-details-row">
+                                        <strong>File:</strong>
+                                        <a :href="'file://' + item.file_path" x-text="item.file_path.split('/').slice(-3).join('/')"></a>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="column done">
+                <div class="column-header">
+                    <h2>Done</h2>
+                    <span class="column-count" x-text="countEpicsByStatus('Done')"></span>
+                </div>
+                <div class="column-cards">
+                    <template x-for="item in getEpicsByStatus('Done')" :key="item.id + item.project">
+                        <div class="card" :class="{ expanded: expandedId === item.id }" @click="toggleExpand(item.id)">
+                            <div class="card-header">
+                                <span class="card-title" x-text="item.title"></span>
+                            </div>
+                            <div class="card-meta">
+                                <span class="badge badge-project" x-text="getProjectName(item.project)"></span>
+                                <template x-if="item.priority">
+                                    <span class="badge badge-priority" x-text="item.priority"></span>
+                                </template>
+                            </div>
+                            <template x-if="item.task_count > 0">
+                                <div class="card-progress">
+                                    <span x-text="item.completed_tasks + '/' + item.task_count + ' tasks'"></span>
+                                    <div class="progress-bar">
+                                        <div class="progress-bar-fill" :style="'width: ' + (item.completed_tasks / item.task_count * 100) + '%'"></div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template x-if="expandedId === item.id">
+                                <div class="card-details">
+                                    <div class="card-details-row">
+                                        <strong>ID:</strong>
+                                        <span x-text="item.id"></span>
+                                    </div>
+                                    <div class="card-details-row">
+                                        <strong>File:</strong>
+                                        <a :href="'file://' + item.file_path" x-text="item.file_path.split('/').slice(-3).join('/')"></a>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks by Epic View -->
+        <div class="tasks-by-epic" x-show="data && !loading && view === 'tasks'">
+            <template x-for="epic in getEpicsWithTasks()" :key="epic.id + epic.project">
+                <div class="epic-group">
+                    <div class="epic-group-header" @click="toggleEpicExpand(epic.id)">
+                        <div class="epic-group-title">
+                            <span class="chevron" :class="{ expanded: expandedEpics[epic.id] }">▶</span>
+                            <span x-text="epic.title"></span>
+                            <span class="badge badge-project" x-text="getProjectName(epic.project)"></span>
+                        </div>
+                        <div class="epic-group-stats">
+                            <span x-text="getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'todo').length + ' todo'"></span>
+                            <span x-text="getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'done').length + ' done'"></span>
+                        </div>
+                    </div>
+                    <div class="epic-group-content" x-show="expandedEpics[epic.id]">
+                        <div class="task-column">
+                            <div class="task-column-header">
+                                <span>Todo</span>
+                                <span x-text="getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'todo').length"></span>
+                            </div>
+                            <template x-for="task in getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'todo')" :key="task.id">
+                                <div class="task-item">
+                                    <span class="checkbox">☐</span>
+                                    <div class="task-info">
+                                        <span class="task-title" x-text="task.title"></span>
+                                        <span class="badge badge-size task-size" :class="task.size.toLowerCase()" x-text="task.size"></span>
+                                    </div>
+                                </div>
+                            </template>
+                            <template x-if="getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'todo').length === 0">
+                                <div style="color: #64748b; font-size: 0.8125rem; padding: 0.5rem;">No tasks</div>
+                            </template>
+                        </div>
+                        <div class="task-column">
+                            <div class="task-column-header">
+                                <span>Done</span>
+                                <span x-text="getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'done').length"></span>
+                            </div>
+                            <template x-for="task in getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'done')" :key="task.id">
+                                <div class="task-item done">
+                                    <span class="checkbox">✓</span>
+                                    <div class="task-info">
+                                        <span class="task-title" x-text="task.title"></span>
+                                        <span class="badge badge-size task-size" :class="task.size.toLowerCase()" x-text="task.size"></span>
+                                    </div>
+                                </div>
+                            </template>
+                            <template x-if="getTasksForEpic(epic).filter(t => normalizeStatus(t.status) === 'done').length === 0">
+                                <div style="color: #64748b; font-size: 0.8125rem; padding: 0.5rem;">No tasks</div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template x-if="getEpicsWithTasks().length === 0">
+                <div style="color: #64748b; text-align: center; padding: 2rem;">No tasks found</div>
+            </template>
+        </div>
+    </div>
+
+    <script>
+        function dashboard() {
+            return {
+                data: null,
+                loading: true,
+                error: null,
+                view: 'epics',
+                selectedProject: 'all',
+                search: '',
+                expandedId: null,
+                expandedEpics: {},
+                strategyExpanded: true,
+                refreshInterval: null,
+
+                async init() {
+                    await this.refresh();
+                    // Refresh every 20 seconds
+                    this.refreshInterval = setInterval(() => this.refresh(), 20000);
+                },
+
+                async refresh() {
+                    try {
+                        const response = await fetch('/api/data');
+                        if (!response.ok) throw new Error('Failed to fetch data');
+                        this.data = await response.json();
+                        this.error = null;
+                    } catch (e) {
+                        this.error = 'Failed to load data: ' + e.message;
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                getSelectedProjectData() {
+                    if (this.selectedProject === 'all') return null;
+                    return this.data?.projects?.find(p => p.id === this.selectedProject);
+                },
+
+                get filteredEpics() {
+                    const epics = this.data?.epics || [];
+                    return epics.filter(item => {
+                        if (this.selectedProject !== 'all' && item.project !== this.selectedProject) {
+                            return false;
+                        }
+                        if (this.search) {
+                            const searchLower = this.search.toLowerCase();
+                            return item.title.toLowerCase().includes(searchLower) ||
+                                   item.id.toLowerCase().includes(searchLower);
+                        }
+                        return true;
+                    });
+                },
+
+                get filteredTasks() {
+                    const tasks = this.data?.tasks || [];
+                    return tasks.filter(item => {
+                        if (this.selectedProject !== 'all' && item.project !== this.selectedProject) {
+                            return false;
+                        }
+                        if (this.search) {
+                            const searchLower = this.search.toLowerCase();
+                            return item.title.toLowerCase().includes(searchLower) ||
+                                   item.id.toLowerCase().includes(searchLower);
+                        }
+                        return true;
+                    });
+                },
+
+                normalizeStatus(s) {
+                    if (!s) return 'todo';
+                    const lower = s.toLowerCase().replace(/_/g, ' ');
+                    if (lower === 'done') return 'done';
+                    return 'todo'; // Todo, Not Started, In Progress all map to todo for tasks
+                },
+
+                getEpicsByStatus(status) {
+                    const targetStatus = status.toLowerCase();
+                    return this.filteredEpics.filter(item => {
+                        const itemStatus = (item.status || 'not started').toLowerCase();
+                        return itemStatus === targetStatus;
+                    });
+                },
+
+                countEpicsByStatus(status) {
+                    return this.getEpicsByStatus(status).length;
+                },
+
+                countTasksByStatus(status) {
+                    const targetStatus = this.normalizeStatus(status);
+                    return this.filteredTasks.filter(t => this.normalizeStatus(t.status) === targetStatus).length;
+                },
+
+                getEpicsWithTasks() {
+                    // Get unique epics that have tasks in filteredTasks
+                    const epicIds = new Set(this.filteredTasks.map(t => t.epic_id + '|' + t.project));
+                    const epics = this.filteredEpics.filter(e => epicIds.has(e.id + '|' + e.project));
+
+                    // Also include epics that match the filter even if they have no tasks
+                    const epicsWithoutTasks = this.filteredEpics.filter(e =>
+                        !epicIds.has(e.id + '|' + e.project) &&
+                        this.filteredTasks.some(t => t.project === e.project)
+                    );
+
+                    return [...epics, ...epicsWithoutTasks].sort((a, b) => {
+                        // Sort by status (In Progress first, then Not Started, then Done)
+                        const statusOrder = { 'in progress': 0, 'not started': 1, 'done': 2 };
+                        const aOrder = statusOrder[a.status.toLowerCase()] ?? 1;
+                        const bOrder = statusOrder[b.status.toLowerCase()] ?? 1;
+                        if (aOrder !== bOrder) return aOrder - bOrder;
+                        return a.title.localeCompare(b.title);
+                    });
+                },
+
+                getTasksForEpic(epic) {
+                    return this.filteredTasks.filter(t =>
+                        t.epic_id === epic.id && t.project === epic.project
+                    );
+                },
+
+                getProjectName(projectId) {
+                    const project = this.data?.projects?.find(p => p.id === projectId);
+                    if (project) {
+                        const name = project.name;
+                        if (name.length > 15) {
+                            return name.split(' ').map(w => w[0]).join('');
+                        }
+                        return name;
+                    }
+                    return projectId;
+                },
+
+                toggleExpand(id) {
+                    this.expandedId = this.expandedId === id ? null : id;
+                },
+
+                toggleEpicExpand(id) {
+                    this.expandedEpics[id] = !this.expandedEpics[id];
+                },
+
+                formatTime(isoString) {
+                    if (!isoString) return '';
+                    const date = new Date(isoString);
+                    return date.toLocaleTimeString();
+                }
+            };
+        }
+    </script>
+</body>
+</html>

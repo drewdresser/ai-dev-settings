@@ -8,11 +8,12 @@ If a `/strategy/` folder exists, read these files in order before starting work:
 
 1. `/strategy/VISION.md` — Strategic context
 2. `/strategy/OKRs.md` — Current priorities
-3. `/strategy/epics/<relevant-epic>.md` — Epic details
-4. `/strategy/tasks/<assigned-task>.md` — Specific task
-5. `/strategy/adrs/` — Relevant architectural decisions
+3. `/strategy/EPICS.md` — Project status, work order, and recommended next epic
+4. `/strategy/epics/<relevant-epic>.md` — Epic details
+5. `/strategy/tasks/<assigned-task>.md` — Specific task
+6. `/strategy/adrs/` — Relevant architectural decisions
 
-This gives you full context from strategy down to implementation. Create ADRs when making significant architectural decisions.
+This gives you full context from strategy down to implementation. The `EPICS.md` file is your go-to for understanding project status and deciding what to work on next. Create ADRs when making significant architectural decisions.
 
 ## Project Map
 
@@ -105,6 +106,7 @@ pnpm build
 - **No inline imports.** All imports at the top of the file, never inside functions or conditionals.
 - When completing tasks, update status in `/strategy/tasks/`.
 - Create ADRs in `/strategy/adrs/` for significant architectural decisions.
+- ALWAYS use #context7 MCP Server to read relevant documentation. Do this every time you are working with a language, framework, library etc. Never assume that you know the answer as these things change frequently. Your training date is in the past so your knowledge is likely out of date, even if it is a technology you are familiar with.
 
 ## AWS Deployment Notes
 
