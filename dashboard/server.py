@@ -6,11 +6,18 @@
 Strategy Dashboard Server
 
 A lightweight HTTP server for viewing epics and tasks across multiple projects.
-Run with: uv run python dashboard/server.py
+
+Usage:
+    uv run python dashboard/server.py --projects proj1,proj2,proj3
+    uv run python dashboard/server.py --dir /path/to/projects
+    DASHBOARD_PROJECTS=proj1,proj2 uv run python dashboard/server.py
+
+If no projects are specified, auto-discovers directories with /strategy/ folders.
 """
 
 import argparse
 import json
+import os
 import sys
 import time
 from datetime import datetime, timezone
@@ -22,11 +29,13 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from parser import scan_all_projects
 
-# Configuration
-PROJECTS_DIR = Path(__file__).parent.parent.parent  # ../../ (parent of ai-dev-settings)
-PROJECT_NAMES = ["aws-solutions-architect-bench", "signal-shift", "biotech-game"]
-PORT = 8080
+# Default configuration
+DEFAULT_PORT = 8080
 CACHE_TTL = 5  # seconds
+
+# Runtime configuration (set in main())
+PROJECTS_DIR: Path = Path(".")
+PROJECT_NAMES: list[str] = []
 
 # Cache for parsed data
 _cache: dict = {"data": None, "timestamp": 0}
@@ -98,14 +107,73 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         super().log_message(format, *args)
 
 
+def discover_projects(projects_dir: Path) -> list[str]:
+    """Auto-discover projects with /strategy/ folders."""
+    discovered = []
+    if not projects_dir.exists():
+        return discovered
+
+    for item in projects_dir.iterdir():
+        if item.is_dir() and (item / "strategy").is_dir():
+            discovered.append(item.name)
+
+    return sorted(discovered)
+
+
 def main():
     """Run the dashboard server."""
-    parser = argparse.ArgumentParser(description="Strategy Dashboard Server")
+    global PROJECTS_DIR, PROJECT_NAMES
+
+    parser = argparse.ArgumentParser(
+        description="Strategy Dashboard Server",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s --projects myproject,another-project
+  %(prog)s --dir ~/Code --projects proj1,proj2
+  %(prog)s --dir ~/Code  # auto-discovers projects with /strategy/ folders
+  DASHBOARD_PROJECTS=proj1,proj2 %(prog)s
+        """,
+    )
     parser.add_argument(
-        "--port", "-p", type=int, default=PORT, help=f"Port to run on (default: {PORT})"
+        "--port",
+        "-p",
+        type=int,
+        default=int(os.environ.get("DASHBOARD_PORT", DEFAULT_PORT)),
+        help=f"Port to run on (default: {DEFAULT_PORT}, or DASHBOARD_PORT env var)",
+    )
+    parser.add_argument(
+        "--dir",
+        "-d",
+        type=Path,
+        default=Path(
+            os.environ.get(
+                "DASHBOARD_DIR", str(Path(__file__).parent.parent.parent)
+            )
+        ),
+        help="Directory containing projects (default: parent of ai-dev-settings, or DASHBOARD_DIR env var)",
+    )
+    parser.add_argument(
+        "--projects",
+        type=str,
+        default=os.environ.get("DASHBOARD_PROJECTS", ""),
+        help="Comma-separated list of project directory names (or DASHBOARD_PROJECTS env var). "
+        "If not specified, auto-discovers projects with /strategy/ folders.",
     )
     args = parser.parse_args()
-    port = args.port
+
+    # Set global configuration
+    PROJECTS_DIR = args.dir.resolve()
+
+    # Determine project names: CLI/env > auto-discovery
+    if args.projects:
+        PROJECT_NAMES = [p.strip() for p in args.projects.split(",") if p.strip()]
+    else:
+        PROJECT_NAMES = discover_projects(PROJECTS_DIR)
+        if not PROJECT_NAMES:
+            print(f"No projects with /strategy/ folders found in: {PROJECTS_DIR}")
+            print("Specify projects with --projects or DASHBOARD_PROJECTS env var")
+            sys.exit(1)
 
     # Initial scan to show stats
     projects, epics, tasks = scan_all_projects(PROJECTS_DIR, PROJECT_NAMES)
@@ -113,13 +181,16 @@ def main():
     print("Strategy Dashboard")
     print("=" * 40)
     print(f"Projects directory: {PROJECTS_DIR}")
-    print(f"Scanning: {', '.join(PROJECT_NAMES)}")
+    if args.projects:
+        print(f"Scanning (specified): {', '.join(PROJECT_NAMES)}")
+    else:
+        print(f"Scanning (auto-discovered): {', '.join(PROJECT_NAMES)}")
     print(f"Found: {len(epics)} epics, {len(tasks)} tasks")
     print("=" * 40)
-    print(f"Dashboard running at http://localhost:{port}")
+    print(f"Dashboard running at http://localhost:{args.port}")
     print("Press Ctrl+C to stop\n")
 
-    server = HTTPServer(("", port), DashboardHandler)
+    server = HTTPServer(("", args.port), DashboardHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

@@ -1,12 +1,13 @@
 # ai-dev-settings
 
-Personal, versioned configuration for AI coding tools:
+Reusable, versioned configuration for AI coding tools:
 
 - **AGENTS.md** (shared truth): Codex + Cursor (+ referenced by Claude)
 - **Claude Code**: CLAUDE.md + agents, commands, hooks, skills
 - **Cursor**: .cursorrules + .cursor/rules/*.mdc + reusable command prompts
 - **Codex**: Global config + AGENTS.md
 - **Workflow**: Multi-project AI agent development framework (see [docs/WORKFLOW.md](docs/WORKFLOW.md))
+- **Dashboard**: Visual strategy dashboard for tracking epics/tasks across projects
 
 ## Quick Start
 
@@ -69,6 +70,11 @@ Preconfigured for:
 ai-dev-settings/
 ├── README.md
 ├── justfile
+├── dashboard/                 # Strategy dashboard (optional)
+│   ├── server.py              # Dashboard server
+│   ├── parser.py              # Markdown parser
+│   ├── models.py              # Data models
+│   └── index.html             # Dashboard UI
 ├── docs/
 │   └── WORKFLOW.md            # Multi-project AI workflow framework
 ├── project/                   # Files to install into projects
@@ -138,6 +144,36 @@ After installing, customize the files for your specific project:
 1. **CLAUDE.md**: Update the project map and common commands
 2. **AGENTS.md**: Add project-specific conventions
 3. **.cursor/rules/**: Add or modify stack-specific rules
+
+## Strategy Dashboard
+
+The dashboard provides a visual overview of epics and tasks across multiple projects that use the `/strategy/` folder structure.
+
+### Running the Dashboard
+
+```bash
+# Auto-discover projects with /strategy/ folders in parent directory
+uv run python dashboard/server.py
+
+# Specify projects explicitly
+uv run python dashboard/server.py --projects myproject,another-project
+
+# Specify a different projects directory
+uv run python dashboard/server.py --dir ~/Code --projects proj1,proj2
+
+# Using environment variables
+DASHBOARD_PROJECTS=proj1,proj2 DASHBOARD_DIR=~/Code uv run python dashboard/server.py
+```
+
+### Configuration Options
+
+| Option | Environment Variable | Description |
+|--------|---------------------|-------------|
+| `--port`, `-p` | `DASHBOARD_PORT` | Port to run on (default: 8080) |
+| `--dir`, `-d` | `DASHBOARD_DIR` | Directory containing projects |
+| `--projects` | `DASHBOARD_PROJECTS` | Comma-separated project names |
+
+If `--projects` is not specified, the dashboard auto-discovers directories containing `/strategy/` folders.
 
 ## Prerequisites
 
