@@ -246,7 +246,7 @@ This sequence provides agents with full context: from high-level strategy down t
 
 ### EPICS.md Template
 
-```markdown
+````markdown
 # Epics Overview
 
 ## Epic Summary
@@ -258,7 +258,7 @@ This sequence provides agents with full context: from high-level strategy down t
 
 ---
 
-## Recommended Work Order
+## Possible Work Order
 
 ```
 Phase 1 (Foundation):
@@ -317,7 +317,7 @@ Phase 3 (Polish):                        │
 | Idea | Reason |
 |------|--------|
 | [Rejected feature] | [Reason - e.g., violates non-goals, out of scope] |
-```
+````
 
 ### Epic Template
 
