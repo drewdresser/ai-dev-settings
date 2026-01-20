@@ -1,32 +1,66 @@
 # ai-dev-settings
 
-Reusable, versioned configuration for AI coding tools:
+> Reusable, versioned configuration for AI coding tools — get up and running with AI agents in new projects quickly.
 
-- **AGENTS.md** (shared truth): Codex + Cursor (+ referenced by Claude)
-- **Claude Code**: CLAUDE.md + agents, commands, hooks, skills
-- **Cursor**: .cursorrules + .cursor/rules/*.mdc + reusable command prompts
-- **Codex**: Global config + AGENTS.md
-- **Workflow**: Multi-project AI agent development framework (see [docs/WORKFLOW.md](docs/WORKFLOW.md))
-- **Dashboard**: Visual strategy dashboard for tracking epics/tasks across projects
+**Supported AI Tools:**
+- **Claude Code** - CLAUDE.md + agents, commands, hooks, skills
+- **Cursor** - .cursorrules + stack-specific rules + command templates
+- **Codex** - Global config + AGENTS.md
+- **Multi-Project Workflow** - Strategy dashboard for tracking epics/tasks
+
+## Why Use This?
+
+Managing AI coding tool configurations across multiple projects is tedious. This repository provides:
+
+✅ **Consistent AI behavior** across all your projects  
+✅ **Pre-configured commands** for common development tasks  
+✅ **Strategy-first workflow** for AI-driven development  
+✅ **One-command installation** into any project  
+✅ **Stack-specific rules** for Python, React, and more  
 
 ## Quick Start
 
-### Install into a project
+### 1. Clone this repository
+
+```bash
+# Clone to a location you'll keep it
+git clone https://github.com/drewdresser/ai-dev-settings.git ~/ai-dev-settings
+cd ~/ai-dev-settings
+```
+
+### 2. Install prerequisites
+
+You'll need [just](https://github.com/casey/just) (optional but recommended):
+
+```bash
+# macOS
+brew install just
+
+# Linux
+cargo install just
+# or
+wget -qO - 'https://proget.makedeb.org/debian-feeds/prebuilt-mpr.pub' | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
+echo "deb [arch=all,$(dpkg --print-architecture) signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.makedeb.org prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list
+sudo apt update
+sudo apt install just
+```
+
+### 3. Install into your project
 
 From inside your target project directory:
 
 ```bash
 # Using just (recommended)
-just -f /path/to/ai-dev-settings/justfile install
+just -f ~/ai-dev-settings/justfile install
 
 # Or directly with the script
-/path/to/ai-dev-settings/scripts/install_project.sh /path/to/ai-dev-settings
+~/ai-dev-settings/scripts/install_project.sh ~/ai-dev-settings $(pwd)
 ```
 
-### Link global configs
+### 4. Link global configs (optional)
 
 ```bash
-cd /path/to/ai-dev-settings
+cd ~/ai-dev-settings
 just link-global
 ```
 
@@ -34,6 +68,13 @@ This symlinks global configs into:
 - `~/.codex/AGENTS.md`
 - `~/.codex/config.toml`
 - `~/.claude/settings.json`
+
+### 5. Customize for your project
+
+After installation, edit these files in your project:
+1. **CLAUDE.md** - Update project map and common commands
+2. **AGENTS.md** - Add project-specific conventions
+3. **.cursor/rules/** - Modify stack-specific rules as needed
 
 ## Workflow Framework
 
@@ -145,6 +186,75 @@ After installing, customize the files for your specific project:
 2. **AGENTS.md**: Add project-specific conventions
 3. **.cursor/rules/**: Add or modify stack-specific rules
 
+## Example Walkthrough
+
+Here's a complete example of setting up a new Python project:
+
+```bash
+# 1. Create your new project
+mkdir my-awesome-api
+cd my-awesome-api
+git init
+
+# 2. Install ai-dev-settings
+just -f ~/ai-dev-settings/justfile install
+
+# 3. Verify installation
+ls -la
+# You should see: AGENTS.md, CLAUDE.md, .claude/, .cursorrules, .cursor/
+
+# 4. Customize CLAUDE.md for your project
+# Edit the "Project Map" section to match your structure
+
+# 5. Start using AI tools
+# In Claude Code, you can now use commands like:
+# - `/rapid` for fast iterations
+# - `/architect` for design decisions
+# - `/lint-fix` to fix linting issues
+# - `/add-tests` to generate tests
+```
+
+## Troubleshooting
+
+### Installation script fails
+
+**Problem**: Permission denied when running install script
+
+**Solution**:
+```bash
+chmod +x ~/ai-dev-settings/scripts/*.sh
+```
+
+### `just` command not found
+
+**Problem**: `just` is not installed
+
+**Solution**: Either install `just` (see Quick Start) or use the script directly:
+```bash
+~/ai-dev-settings/scripts/install_project.sh ~/ai-dev-settings $(pwd)
+```
+
+### Files not showing up in my project
+
+**Problem**: Files weren't copied
+
+**Solution**: Make sure you're running the command from your project directory:
+```bash
+cd /path/to/your/project
+just -f ~/ai-dev-settings/justfile install
+```
+
+### Global configs not working
+
+**Problem**: AI tools don't see global configs
+
+**Solution**: Verify symlinks were created:
+```bash
+ls -la ~/.codex/
+ls -la ~/.claude/
+# You should see symlinks pointing to your ai-dev-settings directory
+```
+
 ## Strategy Dashboard
 
 The dashboard provides a visual overview of epics and tasks across multiple projects that use the `/strategy/` folder structure.
@@ -178,7 +288,20 @@ If `--projects` is not specified, the dashboard auto-discovers directories conta
 ## Prerequisites
 
 - [just](https://github.com/casey/just) command runner (optional but recommended)
-- Bash shell
+- Bash shell (Linux/macOS/WSL)
+- One or more AI coding tools:
+  - [Claude Code](https://www.anthropic.com/claude/code) (by Anthropic)
+  - [Cursor](https://cursor.sh/) (AI-powered code editor)
+  - [Codex](https://github.com/github/codex) (GitHub Copilot Workspace)
+- For dashboard: Python 3.8+ and [uv](https://github.com/astral-sh/uv)
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Reference Repos
 
