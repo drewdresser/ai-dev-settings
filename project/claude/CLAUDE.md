@@ -113,5 +113,5 @@ pnpm build
 - Frontend deploys via AWS Amplify
 - Backend runs on AWS Lambda or ECS
 - Never commit AWS credentials
-- Prefer infrastructure-as-code (CDK/SAM/Terraform)
+- Prefer infrastructure-as-code using AWS CDK in Python
 
