@@ -11,29 +11,58 @@ Reusable, versioned configuration for AI coding tools:
 
 ## Quick Start
 
-### Install into a project
-
-From inside your target project directory:
+### 1. Clone this repository
 
 ```bash
-# Using just (recommended)
-just -f /path/to/ai-dev-settings/justfile install
-
-# Or directly with the script
-/path/to/ai-dev-settings/scripts/install_project.sh /path/to/ai-dev-settings
+git clone https://github.com/drewdresser/ai-dev-settings.git
+cd ai-dev-settings
 ```
 
-### Link global configs
+### 2. Install global configurations (recommended)
+
+Set up global AI tool configurations that apply across all your projects:
 
 ```bash
-cd /path/to/ai-dev-settings
 just link-global
 ```
 
-This symlinks global configs into:
-- `~/.codex/AGENTS.md`
-- `~/.codex/config.toml`
-- `~/.claude/settings.json`
+This creates symlinks:
+- `~/.codex/AGENTS.md` - Universal agent behavior
+- `~/.codex/config.toml` - Codex tool configuration
+- `~/.claude/settings.json` - Claude permissions and settings
+
+### 3. Install into a project
+
+Navigate to any project where you want to use these configurations:
+
+```bash
+cd /path/to/your-project
+just -f /path/to/ai-dev-settings/justfile install
+```
+
+This copies project-specific configs:
+- `AGENTS.md` - Shared agent instructions
+- `CLAUDE.md` - Claude Code project instructions
+- `.claude/` - Agents, commands, hooks, skills
+- `.cursor/` - Cursor IDE configurations
+
+### 4. (Optional) Set up the strategy framework
+
+Follow the [Multi-Project AI Workflow](docs/WORKFLOW.md) to create a `/strategy/` folder:
+
+```bash
+mkdir -p strategy/{epics,tasks,adrs}
+# Create your VISION.md, OKRs.md, etc.
+```
+
+### 5. (Optional) Run the dashboard
+
+Visualize your strategy across multiple projects:
+
+```bash
+uv run python dashboard/server.py
+# Open http://localhost:8080
+```
 
 ## Workflow Framework
 
