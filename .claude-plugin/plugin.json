@@ -15,5 +15,9 @@
     "user-stories",
     "agents",
     "code-review"
-  ]
+  ],
+  "commands": "./commands",
+  "skills": "./skills",
+  "agents": "./agents",
+  "hooks": "./hooks"
 }
