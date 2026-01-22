@@ -1,0 +1,33 @@
+{
+  "name": "ai-dev-marketplace",
+  "owner": {
+    "name": "Drew Dresser",
+    "url": "https://github.com/drewdresser"
+  },
+  "metadata": {
+    "description": "Strategic planning meets rapid execution - a Claude Code plugin for vision-to-code workflows"
+  },
+  "plugins": [
+    {
+      "name": "ai-dev",
+      "source": "./",
+      "description": "Strategic planning meets rapid execution. 10 agents, 20+ commands, 7 skills for vision-to-code workflow with main-branch development.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Drew Dresser"
+      },
+      "homepage": "https://github.com/drewdresser/ai-dev-settings",
+      "repository": "https://github.com/drewdresser/ai-dev-settings",
+      "license": "MIT",
+      "keywords": [
+        "strategic-planning",
+        "workflow-automation",
+        "main-branch",
+        "okrs",
+        "user-stories",
+        "agents",
+        "code-review"
+      ]
+    }
+  ]
+}

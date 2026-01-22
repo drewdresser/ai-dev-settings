@@ -60,15 +60,16 @@ This plugin combines:
 ### 1. Install the Plugin
 
 ```bash
-# Clone and install as a Claude Code plugin
-git clone https://github.com/drewdresser/ai-dev-settings.git ~/.claude/plugins/ai-dev
+# Add the marketplace
+/plugin marketplace add https://github.com/drewdresser/ai-dev-settings
+
+# Install the plugin
+/plugin install ai-dev
 ```
 
-Or add to your Claude Code settings:
-```json
-{
-  "plugins": ["~/.claude/plugins/ai-dev"]
-}
+**Alternative:** Clone directly
+```bash
+git clone https://github.com/drewdresser/ai-dev-settings.git ~/.claude/plugins/ai-dev
 ```
 
 ### 2. Start Using Commands
