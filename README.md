@@ -1,217 +1,203 @@
-# ai-dev-settings
+# ai-dev
 
-Reusable, versioned configuration for AI coding tools:
+**Strategic planning meets rapid execution.** A Claude Code plugin that bridges vision-to-code workflows with main-branch development.
 
-- **AGENTS.md** (shared truth): Codex + Cursor (+ referenced by Claude)
-- **Claude Code**: CLAUDE.md + agents, commands, hooks, skills
-- **Cursor**: .cursorrules + .cursor/rules/*.mdc + reusable command prompts
-- **Codex**: Global config + AGENTS.md
-- **Workflow**: Multi-project AI agent development framework (see [docs/WORKFLOW.md](docs/WORKFLOW.md))
-- **Dashboard**: Visual strategy dashboard for tracking epics/tasks across projects
+## What's Included
+
+- **10 Agents** - Specialized AI agents for orchestration, planning, review, implementation, and research
+- **20+ Commands** - Strategic planning, git workflows, quality checks, and execution commands
+- **7 Skills** - Reusable knowledge for git, architecture, APIs, testing, performance, and strategic planning
+- **Strategy Templates** - Ready-to-use templates for VISION.md, OKRs.md, EPICS.md
+
+## Philosophy
+
+This plugin combines:
+- **Strategic Planning** (from project-planner) - 8-phase Socratic workflow from problem space to user stories
+- **Trunk-Based Development** - All commits to main, no feature branches, small atomic changes
+- **GitHub Integration** - Epics → Milestones, User Stories → Issues, bidirectional sync
 
 ## Quick Start
 
-### 1. Clone this repository
+### 1. Install the Plugin
 
 ```bash
-git clone https://github.com/drewdresser/ai-dev-settings.git
-cd ai-dev-settings
+# Clone and install as a Claude Code plugin
+git clone https://github.com/drewdresser/ai-dev-settings.git ~/.claude/plugins/ai-dev
 ```
 
-### 2. Install global configurations (recommended)
+Or add to your Claude Code settings:
+```json
+{
+  "plugins": ["~/.claude/plugins/ai-dev"]
+}
+```
 
-Set up global AI tool configurations that apply across all your projects:
+### 2. Start Using Commands
 
 ```bash
-just link-global
+# Strategic planning (full 8-phase workflow)
+/ai-dev:kickoff "My Project"
+
+# Bridge GitHub Issue to implementation plan
+/ai-dev:plan-issue #42
+
+# Execute a plan with task tracking
+/ai-dev:work plans/feature-name.md
+
+# Commit and push to main
+/ai-dev:commit-push
 ```
 
-This creates symlinks:
-- `~/.codex/AGENTS.md` - Universal agent behavior
-- `~/.codex/config.toml` - Codex tool configuration
-- `~/.claude/settings.json` - Claude permissions and settings
+## Command Reference
 
-### 3. Install into a project
+### Strategic Planning
 
-Navigate to any project where you want to use these configurations:
+| Command | Purpose |
+|---------|---------|
+| `/ai-dev:kickoff` | Full 8-phase strategic planning workflow |
+| `/ai-dev:north-star` | Define vision, mission, and north star |
+| `/ai-dev:strategy` | Define strategy and non-goals |
+| `/ai-dev:metrics` | Define success metrics and failure thresholds |
+| `/ai-dev:okrs` | Create quarterly OKRs |
+| `/ai-dev:epics` | Create epics (→ GitHub Milestones) |
+| `/ai-dev:user-stories` | Create user stories (→ GitHub Issues) |
 
-```bash
-cd /path/to/your-project
-just -f /path/to/ai-dev-settings/justfile install
+### Execution Workflow
+
+| Command | Purpose |
+|---------|---------|
+| `/ai-dev:plan-issue` | Bridge GitHub Issue → technical plan |
+| `/ai-dev:plan` | Interactive technical planning |
+| `/ai-dev:work` | Execute plan with TodoWrite tracking |
+| `/ai-dev:review` | Multi-agent code review |
+| `/ai-dev:sync-strategy` | Sync GitHub → /strategy/ docs |
+
+### Git (Main-Branch Development)
+
+| Command | Purpose |
+|---------|---------|
+| `/ai-dev:commit` | Create conventional commit (local) |
+| `/ai-dev:commit-push` | Commit + push to main with quality gates |
+| `/ai-dev:sync` | Pull latest from origin |
+
+### Quality
+
+| Command | Purpose |
+|---------|---------|
+| `/ai-dev:run-tests` | Run test suite |
+| `/ai-dev:lint-fix` | Fix linting issues |
+| `/ai-dev:security-scan` | Scan for security issues |
+
+## Workflow: User Story → Shipped Code
+
+```
+1. /ai-dev:kickoff "MyProject"
+   → Creates /strategy/VISION.md, OKRs.md, EPICS.md
+   → Creates GitHub Milestones and Issues
+
+2. /ai-dev:plan-issue #123
+   → Reads issue + strategic context
+   → Generates plans/issue-123-feature-name.md
+
+3. /ai-dev:work plans/issue-123-feature-name.md
+   → TodoWrite task breakdown
+   → Incremental commits to main
+   → Final push with quality gates
+
+4. /ai-dev:sync-strategy
+   → Updates /strategy/ with GitHub state
+   → Tracks epic progress
 ```
 
-This copies project-specific configs:
-- `AGENTS.md` - Shared agent instructions
-- `CLAUDE.md` - Claude Code project instructions
-- `.claude/` - Agents, commands, hooks, skills
-- `.cursor/` - Cursor IDE configurations
+## Directory Structure
 
-### 4. (Optional) Set up the strategy framework
-
-Follow the [Multi-Project AI Workflow](docs/WORKFLOW.md) to create a `/strategy/` folder:
-
-```bash
-mkdir -p strategy/{epics,tasks,adrs}
-# Create your VISION.md, OKRs.md, etc.
+```
+ai-dev-settings/
+├── .claude-plugin/
+│   └── plugin.json           # Plugin manifest
+├── agents/
+│   ├── orchestration/        # Master coordinator
+│   ├── planning/             # Strategic planner
+│   ├── review/               # Code, security, test reviewers
+│   ├── implementation/       # Debugger, refactorer, docs
+│   └── research/             # Codebase analyst
+├── commands/
+│   ├── workflows/            # kickoff, plan, work, review
+│   ├── strategy/             # north-star, strategy, okrs, epics, user-stories
+│   ├── bridge/               # plan-issue, sync-strategy
+│   ├── git/                  # commit, commit-push, sync
+│   └── quality/              # run-tests, lint-fix, security-scan
+├── skills/
+│   ├── strategic-planning/
+│   ├── managing-git/
+│   ├── designing-architecture/
+│   └── ...
+├── hooks/                    # Event hooks
+├── templates/strategy/       # Strategy file templates
+└── dashboard/                # Optional: Strategy visualization
 ```
 
-### 5. (Optional) Run the dashboard
+## Agents
 
-Visualize your strategy across multiple projects:
+| Agent | Purpose |
+|-------|---------|
+| `orchestrator` | Coordinates complex multi-step tasks |
+| `strategic-planner` | Socratic planning facilitation |
+| `code-reviewer` | Code quality assessment |
+| `security-auditor` | Security vulnerability analysis |
+| `test-architect` | Test design and coverage |
+| `debugger` | Error investigation |
+| `refactorer` | Code improvement |
+| `docs-writer` | Documentation tasks |
+| `codebase-analyst` | Project structure analysis |
+
+## Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `strategic-planning` | Detects and guides planning discussions |
+| `managing-git` | Git workflows and trunk-based development |
+| `designing-architecture` | Architecture patterns and decisions |
+| `analyzing-projects` | Project structure analysis |
+| `designing-tests` | Test strategy and patterns |
+| `designing-apis` | API design principles |
+| `optimizing-performance` | Performance optimization |
+
+## Strategy Dashboard (Optional)
+
+Visualize your strategy across projects:
 
 ```bash
 uv run python dashboard/server.py
 # Open http://localhost:8080
 ```
 
-## Workflow Framework
+## Trunk-Based Development
 
-This repo incorporates the **Multi-Project AI Agent Development Framework** — a structured approach for managing AI-driven development across multiple projects.
+This plugin emphasizes trunk-based development:
 
-**Key concepts:**
-- `/strategy/` folder in each project root for strategic documentation
-- Vision → OKRs → Epics → Tasks hierarchy
-- Architecture Decision Records (ADRs) for preserving decisions
-- Agent-first context consumption pattern
+- **All work on main** - No feature branches for solo/small teams
+- **Small commits** - Atomic, reversible changes
+- **Quality gates** - Tests and lint checks before push
+- **Feature flags** - For incomplete features
 
-See [docs/WORKFLOW.md](docs/WORKFLOW.md) for the complete framework specification.
+The `/ai-dev:commit-push` command includes:
+- Confirmation prompt for main/master
+- Secret scanning
+- Test execution
+- Linting checks
+- Revert instructions after push
 
-## Stack Configuration
+## Requirements
 
-Preconfigured for:
+- Claude Code CLI
+- `gh` CLI (for GitHub integration)
+- Git
 
-**Python Backend**
-- `uv` for dependency management
-- `pytest` for testing
-- `ruff` for linting/formatting
-- `ty` for type checking
-- AWS Lambda / ECS deployment
+## License
 
-**React Frontend**
-- `pnpm` for dependency management
-- TypeScript strict mode
-- Colocated tests
-- AWS Amplify deployment
+MIT
 
-## File Structure
+## Contributing
 
-```
-ai-dev-settings/
-├── README.md
-├── justfile
-├── dashboard/                 # Strategy dashboard (optional)
-│   ├── server.py              # Dashboard server
-│   ├── parser.py              # Markdown parser
-│   ├── models.py              # Data models
-│   └── index.html             # Dashboard UI
-├── docs/
-│   └── WORKFLOW.md            # Multi-project AI workflow framework
-├── project/                   # Files to install into projects
-│   ├── AGENTS.md
-│   └── claude/
-│       ├── CLAUDE.md
-│       ├── agents/            # Specialized agent definitions
-│       ├── commands/          # Reusable command templates
-│       ├── hooks/             # Event hooks and scripts
-│       └── skills/            # Skill definitions
-├── global/
-│   ├── codex/
-│   │   ├── AGENTS.md
-│   │   └── config.toml
-│   └── claude/
-│       └── settings.json
-└── scripts/
-    ├── install_project.sh
-    └── link_global.sh
-```
-
-### Project Strategy Structure (installed per-project)
-
-When following the workflow framework, each project should contain:
-
-```
-your-project/
-├── strategy/
-│   ├── VISION.md              # Strategic foundation
-│   ├── OKRs.md                # Current quarter objectives
-│   ├── epics/
-│   │   └── epic-name.md       # Feature/initiative epics
-│   ├── tasks/
-│   │   └── epic-name-001-task.md  # Specific tasks
-│   └── adrs/
-│       └── 001-decision.md    # Architecture decisions
-├── AGENTS.md
-├── CLAUDE.md
-├── .claude/
-│   ├── agents/
-│   ├── commands/
-│   ├── hooks/
-│   └── skills/
-└── ... (rest of project)
-```
-
-## What Gets Installed
-
-When you run `just install`, these files are copied to your project:
-
-| File | Tool | Purpose |
-|------|------|---------|
-| `AGENTS.md` | Codex, Cursor | Universal behavior contract |
-| `CLAUDE.md` | Claude Code | Project-specific instructions |
-| `.claude/agents/*.md` | Claude Code | Specialized agent definitions |
-| `.claude/commands/*.md` | Claude Code | Reusable command templates |
-| `.claude/hooks/` | Claude Code | Event hooks and scripts |
-| `.claude/skills/` | Claude Code | Skill definitions |
-| `.cursorrules` | Cursor | IDE-level behavior |
-| `.cursor/rules/*.mdc` | Cursor | Stack-specific rules |
-| `.cursor/commands/*.md` | Cursor | Reusable prompt templates |
-
-## Customization
-
-After installing, customize the files for your specific project:
-
-1. **CLAUDE.md**: Update the project map and common commands
-2. **AGENTS.md**: Add project-specific conventions
-3. **.cursor/rules/**: Add or modify stack-specific rules
-
-## Strategy Dashboard
-
-The dashboard provides a visual overview of epics and tasks across multiple projects that use the `/strategy/` folder structure.
-
-### Running the Dashboard
-
-```bash
-# Auto-discover projects with /strategy/ folders in parent directory
-uv run python dashboard/server.py
-
-# Specify projects explicitly
-uv run python dashboard/server.py --projects myproject,another-project
-
-# Specify a different projects directory
-uv run python dashboard/server.py --dir ~/Code --projects proj1,proj2
-
-# Using environment variables
-DASHBOARD_PROJECTS=proj1,proj2 DASHBOARD_DIR=~/Code uv run python dashboard/server.py
-```
-
-### Configuration Options
-
-| Option | Environment Variable | Description |
-|--------|---------------------|-------------|
-| `--port`, `-p` | `DASHBOARD_PORT` | Port to run on (default: 8080) |
-| `--dir`, `-d` | `DASHBOARD_DIR` | Directory containing projects |
-| `--projects` | `DASHBOARD_PROJECTS` | Comma-separated project names |
-
-If `--projects` is not specified, the dashboard auto-discovers directories containing `/strategy/` folders.
-
-## Prerequisites
-
-- [just](https://github.com/casey/just) command runner (optional but recommended)
-- Bash shell
-
-## Reference Repos
-
-Inspired by:
-- [fcakyon/claude-codex-settings](https://github.com/fcakyon/claude-codex-settings)
-- [yixin0829/ai-coding-templates](https://github.com/yixin0829/ai-coding-templates)
-- [inmve/awesome-ai-coding-techniques](https://github.com/inmve/coding-with-ai)
+See [CONTRIBUTING.md](CONTRIBUTING.md).

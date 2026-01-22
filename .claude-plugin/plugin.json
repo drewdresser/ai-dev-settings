@@ -1,0 +1,25 @@
+{
+  "name": "ai-dev",
+  "description": "Strategic planning meets rapid execution. 10 agents, 20+ commands, 7 skills for vision-to-code workflow with main-branch development.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Drew Dresser"
+  },
+  "repository": "https://github.com/drewdresser/ai-dev-settings",
+  "license": "MIT",
+  "keywords": [
+    "strategic-planning",
+    "workflow-automation",
+    "main-branch",
+    "okrs",
+    "user-stories",
+    "agents",
+    "code-review"
+  ],
+  "mcpServers": {
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  }
+}
