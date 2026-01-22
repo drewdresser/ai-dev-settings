@@ -1,5 +1,5 @@
 ---
-name: okrs
+name: ai-dev:okrs
 description: Define Objectives and Key Results that connect your vision to measurable outcomes
 disable-model-invocation: true
 argument-hint: "[time-period, e.g., Q1-2025]"

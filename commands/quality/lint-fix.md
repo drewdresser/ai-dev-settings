@@ -1,5 +1,5 @@
 ---
-name: lint-fix
+name: ai-dev:lint-fix
 description: Automatically fix linting issues in the codebase.
 allowed-tools:
   - Bash

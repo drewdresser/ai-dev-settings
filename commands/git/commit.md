@@ -1,5 +1,5 @@
 ---
-name: commit
+name: ai-dev:commit
 description: Create a conventional commit with auto-generated message based on staged changes.
 allowed-tools:
   - Bash

@@ -1,5 +1,5 @@
 ---
-name: security-scan
+name: ai-dev:security-scan
 description: Scan the codebase for security vulnerabilities and issues.
 allowed-tools:
   - Bash

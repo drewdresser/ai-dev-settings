@@ -1,5 +1,5 @@
 ---
-name: commit-push
+name: ai-dev:commit-push
 description: Commit staged changes and push directly to the current branch. Supports main-branch development workflow with quality gates.
 allowed-tools:
   - Bash

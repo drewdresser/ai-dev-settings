@@ -1,5 +1,5 @@
 ---
-name: run-tests
+name: ai-dev:run-tests
 description: Execute the project's test suite with detailed reporting.
 allowed-tools:
   - Bash

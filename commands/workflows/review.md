@@ -1,5 +1,5 @@
 ---
-name: review
+name: ai-dev:review
 description: Multi-agent code review. Runs code-reviewer, security-auditor, and test-architect in parallel, then synthesizes findings.
 allowed-tools:
   - Read

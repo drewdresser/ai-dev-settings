@@ -1,5 +1,5 @@
 ---
-name: north-star
+name: ai-dev:north-star
 description: Define your project's north star, vision, and mission through rigorous questioning
 disable-model-invocation: true
 argument-hint: "[project-name]"

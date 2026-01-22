@@ -1,5 +1,5 @@
 ---
-name: metrics
+name: ai-dev:metrics
 description: Define success metrics, leading indicators, and failure thresholds for your project
 disable-model-invocation: true
 argument-hint: "[project-name]"

@@ -1,5 +1,5 @@
 ---
-name: plan-issue
+name: ai-dev:plan-issue
 description: Bridge GitHub Issue to Technical Implementation Plan. Reads issue context, strategic documents, and generates a detailed technical plan.
 argument-hint: "#123 or issue URL or /strategy/tasks/ path"
 allowed-tools:

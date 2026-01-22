@@ -1,5 +1,5 @@
 ---
-name: plan
+name: ai-dev:plan
 description: Interactive technical planning workflow. Gathers requirements through Q&A, researches patterns, and outputs a detailed implementation plan.
 argument-hint: "[feature description or issue reference]"
 allowed-tools:

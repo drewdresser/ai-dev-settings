@@ -1,5 +1,5 @@
 ---
-name: strategy
+name: ai-dev:strategy
 description: Define your project's strategy, competitive positioning, and explicit non-goals
 disable-model-invocation: true
 argument-hint: "[project-name]"

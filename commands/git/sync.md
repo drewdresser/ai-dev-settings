@@ -1,5 +1,5 @@
 ---
-name: sync
+name: ai-dev:sync
 description: Pull the latest changes from origin. Essential for trunk-based development.
 allowed-tools:
   - Bash

@@ -1,5 +1,5 @@
 ---
-name: epics
+name: ai-dev:epics
 description: Break down OKRs into major work streams (Epics) and create them as GitHub Milestones
 disable-model-invocation: true
 argument-hint: "[epic-name or 'all']"

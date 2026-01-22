@@ -1,5 +1,5 @@
 ---
-name: sync-strategy
+name: ai-dev:sync-strategy
 description: Sync GitHub state (closed issues, merged PRs) back to /strategy/ documentation
 allowed-tools:
   - Bash

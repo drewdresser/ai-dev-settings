@@ -1,5 +1,5 @@
 ---
-name: kickoff
+name: ai-dev:kickoff
 description: Full strategic planning workflow - guides you through defining north star, vision, mission, strategy, non-goals, success metrics, OKRs, epics, and user stories as GitHub issues
 disable-model-invocation: true
 argument-hint: "[project-name]"

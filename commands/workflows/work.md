@@ -1,5 +1,5 @@
 ---
-name: work
+name: ai-dev:work
 description: Execute an implementation plan using TodoWrite for task tracking and incremental commits to main.
 argument-hint: "[plan-file-path]"
 allowed-tools:

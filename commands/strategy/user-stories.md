@@ -1,5 +1,5 @@
 ---
-name: user-stories
+name: ai-dev:user-stories
 description: Generate detailed user stories and create them as GitHub issues with acceptance criteria
 disable-model-invocation: true
 argument-hint: "[epic-name or milestone]"
