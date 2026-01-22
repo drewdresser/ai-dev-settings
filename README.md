@@ -9,10 +9,49 @@
 - **7 Skills** - Reusable knowledge for git, architecture, APIs, testing, performance, and strategic planning
 - **Strategy Templates** - Ready-to-use templates for VISION.md, OKRs.md, EPICS.md
 
+## Workflow Overview
+
+```mermaid
+flowchart TB
+    subgraph Strategic["Strategic Planning"]
+        K["/ai-dev:kickoff"] --> NS["/ai-dev:north-star"]
+        NS --> ST["/ai-dev:strategy"]
+        ST --> ME["/ai-dev:metrics"]
+        ME --> OK["/ai-dev:okrs"]
+        OK --> EP["/ai-dev:epics"]
+        EP --> US["/ai-dev:user-stories"]
+    end
+
+    subgraph GitHub["GitHub"]
+        MS[(Milestones)]
+        IS[(Issues)]
+    end
+
+    subgraph Execution["Execution"]
+        PI["/ai-dev:plan-issue #123"] --> PL["/ai-dev:plan"]
+        PL --> WK["/ai-dev:work"]
+        WK --> RV["/ai-dev:review"]
+        RV --> CP["/ai-dev:commit-push"]
+    end
+
+    subgraph Output["Output"]
+        MAIN[("main branch")]
+        STRAT[("/strategy/")]
+    end
+
+    EP -->|creates| MS
+    US -->|creates| IS
+    IS -->|reads| PI
+    CP -->|pushes to| MAIN
+    K -->|writes| STRAT
+    SS["/ai-dev:sync-strategy"] -->|updates| STRAT
+    MAIN -.->|merged PRs| SS
+```
+
 ## Philosophy
 
 This plugin combines:
-- **Strategic Planning** (from project-planner) - 8-phase Socratic workflow from problem space to user stories
+- **Strategic Planning** - 8-phase Socratic workflow from problem space to user stories
 - **Trunk-Based Development** - All commits to main, no feature branches, small atomic changes
 - **GitHub Integration** - Epics → Milestones, User Stories → Issues, bidirectional sync
 
