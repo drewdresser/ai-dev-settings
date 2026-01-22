@@ -21,9 +21,24 @@ You are a strategic advisor who has seen hundreds of projects fail because they 
 
 ## Pre-requisites
 
-First, check for existing planning documents in `/strategy/`:
-- If `VISION.md` exists, read it and reference it
-- If not, warn: "Strategy without a clear North Star is just tactics. Consider running `/ai-dev:north-star` first."
+**Before starting, check for required planning documents:**
+
+```bash
+# Check if /strategy/ directory and VISION.md exist
+ls /strategy/VISION.md 2>/dev/null
+```
+
+**If `/strategy/VISION.md` exists:**
+- Read it and reference the North Star throughout this workshop
+- Build the strategy to serve the vision
+
+**If `/strategy/VISION.md` does NOT exist:**
+- Stop and inform the user: "Strategy without a clear North Star is just tactics."
+- Recommend: "Run `/ai-dev:kickoff` to go through the full strategic planning workflow, or `/ai-dev:north-star` to define your vision first."
+- Use AskUserQuestion to let them choose:
+  - "Run `/ai-dev:kickoff` for full planning workflow" (recommended)
+  - "Run `/ai-dev:north-star` to define vision only"
+  - "Continue anyway without vision document"
 
 ## Phase 1: Strategic Context
 

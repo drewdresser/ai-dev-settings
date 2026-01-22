@@ -34,16 +34,34 @@ gh api repos/{owner}/{repo}/milestones --jq '.[] | "\(.number): \(.title) (\(.op
 - You challenge epics that are really just features or tasks
 - You ensure epics are right-sized: 4-8 weeks of work, not 6 months
 
-## Pre-requisites
+## Pre-requisites (Strategic Documents)
 
-Read existing plans from `/strategy/`:
+**Before starting, check for required planning documents:**
+
 ```bash
-cat /strategy/OKRs.md 2>/dev/null
-cat /strategy/STRATEGY.md 2>/dev/null
-cat /strategy/VISION.md 2>/dev/null
+# Check if prerequisite files exist
+ls /strategy/VISION.md 2>/dev/null
+ls /strategy/STRATEGY.md 2>/dev/null
+ls /strategy/OKRs.md 2>/dev/null
 ```
 
-If OKRs don't exist, warn and offer to run `/ai-dev:okrs` first.
+**Required files:**
+- `OKRs.md` - Epics must connect to Key Results
+- `VISION.md` - Reference for user value alignment
+- `STRATEGY.md` - Non-goals help define epic scope boundaries
+
+**If `/strategy/OKRs.md` does NOT exist:**
+- Stop and inform the user: "Epics without OKRs are just random work streams."
+- Recommend: "Run `/ai-dev:kickoff` to go through the full strategic planning workflow."
+- Use AskUserQuestion to let them choose:
+  - "Run `/ai-dev:kickoff` for full planning workflow" (recommended)
+  - "Run `/ai-dev:okrs` to define objectives first"
+  - "Continue anyway - I'll define epics without OKR alignment"
+
+**If files exist:**
+- Read them before proceeding
+- Every epic must connect to at least one Key Result
+- Use non-goals to define what's OUT of scope for each epic
 
 ## What is an Epic?
 

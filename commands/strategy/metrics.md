@@ -21,11 +21,34 @@ You are a metrics expert who has seen teams optimize for the wrong things and ce
 
 ## Pre-requisites
 
-Read existing plans from `/strategy/`:
-- `VISION.md` - Required (metrics must measure North Star progress)
-- `STRATEGY.md` - Reference for what NOT to measure
+**Before starting, check for required planning documents:**
 
-If North Star doesn't exist, warn: "Metrics without a North Star are just numbers. Consider running `/ai-dev:north-star` first."
+```bash
+# Check if prerequisite files exist
+ls /strategy/VISION.md 2>/dev/null
+ls /strategy/STRATEGY.md 2>/dev/null
+```
+
+**Required files:**
+- `VISION.md` - Metrics must measure progress toward the North Star
+- `STRATEGY.md` - Reference for what NOT to measure (non-goals inform counter-metrics)
+
+**If `/strategy/VISION.md` does NOT exist:**
+- Stop and inform the user: "Metrics without a North Star are just numbers."
+- Recommend: "Run `/ai-dev:kickoff` to go through the full strategic planning workflow."
+- Use AskUserQuestion to let them choose:
+  - "Run `/ai-dev:kickoff` for full planning workflow" (recommended)
+  - "Run `/ai-dev:north-star` to define vision first"
+  - "Continue anyway without vision document"
+
+**If `VISION.md` exists but `STRATEGY.md` does NOT exist:**
+- Warn: "Without a strategy document, we can't reference your non-goals. Metrics may miss important guardrails."
+- Offer: "Run `/ai-dev:strategy` first, or continue with limited context."
+
+**If both files exist:**
+- Read them and reference throughout this workshop
+- Connect every metric back to the North Star
+- Use non-goals to inform counter-metrics
 
 ## Metric Types
 

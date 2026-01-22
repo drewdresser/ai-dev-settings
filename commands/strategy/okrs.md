@@ -21,12 +21,33 @@ You are an OKR coach who has seen teams set meaningless objectives and vanity me
 
 ## Pre-requisites
 
-Read existing plans from `/strategy/`:
-- `VISION.md` - Required reference
-- `STRATEGY.md` - Required reference
-- `METRICS.md` - If exists, use as foundation
+**Before starting, check for required planning documents:**
 
-If prerequisites missing, warn and offer to run those first.
+```bash
+# Check if prerequisite files exist
+ls /strategy/VISION.md 2>/dev/null
+ls /strategy/STRATEGY.md 2>/dev/null
+ls /strategy/METRICS.md 2>/dev/null
+```
+
+**Required files:**
+- `VISION.md` - OKRs must connect to the North Star
+- `STRATEGY.md` - OKRs must align with strategic focus and non-goals
+
+**Optional but recommended:**
+- `METRICS.md` - Key Results should align with defined success metrics
+
+**If required files don't exist:**
+- Stop and inform the user: "OKRs without vision and strategy are just arbitrary goals."
+- Recommend: "Run `/ai-dev:kickoff` to go through the full strategic planning workflow."
+- Use AskUserQuestion to let them choose:
+  - "Run `/ai-dev:kickoff` for full planning workflow" (recommended)
+  - "Continue anyway - I'll define OKRs without the strategic foundation"
+
+**If required files exist:**
+- Read them and reference throughout this workshop
+- Every Objective must connect to the North Star
+- Every Key Result should respect the strategy's non-goals
 
 ## OKR Principles to Enforce
 
