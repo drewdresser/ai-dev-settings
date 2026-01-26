@@ -5,7 +5,7 @@ allowed-tools:
   - Bash
   - Read
   - Glob
-  - Grep
+  - Task
   - AskUserQuestion
 ---
 
@@ -39,107 +39,131 @@ All done, start new cycle      → /ai-dev:okrs (next quarter)
 
 ## Process
 
-### Step 1: Check Local Work-in-Progress
+### Step 1: Quick Local State Check
+
+Before launching sub-agents, do a fast local check:
 
 ```bash
-# Check for uncommitted changes
+# Check for uncommitted changes (work in progress)
 git status --porcelain
 
 # Check for existing plan files
-ls -la plans/*.md 2>/dev/null | head -5
+ls plans/*.md 2>/dev/null | head -3
 
 # Recent commits to understand momentum
-git log --oneline -5
+git log --oneline -3
 ```
 
-**If uncommitted changes exist** → Likely mid-work, suggest `/ai-dev:work` to continue or `/ai-dev:commit-push` if ready.
+**If uncommitted changes exist:**
+- This takes priority over audits
+- Likely mid-work: suggest `/ai-dev:work` to continue
+- Or if changes look complete: suggest `/ai-dev:review`
 
-**If a plan file exists** → Check if it's been executed. If not, suggest `/ai-dev:work`.
+**If no local WIP, proceed to sub-agent audits.**
 
-### Step 2: Check Strategy Document Completeness
+### Step 2: Launch Parallel Audits
 
-```bash
-# Check which strategy docs exist
-ls -la strategy/ 2>/dev/null
-ls -la strategy/epics/ 2>/dev/null
-ls -la strategy/tasks/ 2>/dev/null
+Use the Task tool to run two auditor agents **in parallel**:
+
+#### Task 1: Strategy Auditor
+```
+subagent_type: "general-purpose"
+prompt: |
+  You are the strategy-auditor agent. Audit the /strategy/ directory for this project.
+
+  Check:
+  1. Which strategy docs exist (VISION.md, STRATEGY.md, METRICS.md, OKRs.md, EPICS.md)
+  2. Completeness of each document (are required sections present?)
+  3. Depth (how many epics, tasks, ADRs exist?)
+  4. Gaps (what's missing or incomplete?)
+
+  Return a concise summary in this format:
+
+  ## Strategy Audit
+  ### Document Status
+  [Table of docs with status: Complete/Partial/Missing]
+
+  ### Gaps
+  [Numbered list of gaps, most critical first]
+
+  ### Recommended Command
+  [Single ai-dev command to address the most important gap]
 ```
 
-Read the existing strategy docs. For each, determine if it's complete or just a skeleton.
+#### Task 2: GitHub Auditor
+```
+subagent_type: "general-purpose"
+prompt: |
+  You are the github-auditor agent. Audit the GitHub state for this project.
 
-**Decision tree:**
+  Run these commands:
+  1. gh api repos/:owner/:repo/milestones - Get milestone progress
+  2. gh issue list --state open --json number,title,milestone,labels - Get open issues
+  3. Check for plan files in plans/*.md that reference issues
 
-| Missing/Incomplete | Recommended Command |
-|-------------------|---------------------|
-| No `/strategy/` directory | `/ai-dev:kickoff` |
-| VISION.md missing or empty | `/ai-dev:north-star` |
-| STRATEGY.md missing | `/ai-dev:strategy` |
-| METRICS.md missing | `/ai-dev:metrics` |
-| OKRs.md missing or no objectives | `/ai-dev:okrs` |
-| EPICS.md missing or no epics | `/ai-dev:epics` |
-| No tasks/user stories | `/ai-dev:user-stories` |
+  Return a concise summary in this format:
 
-### Step 3: Check GitHub State
+  ## GitHub Audit
+  ### Milestones
+  [Table with milestone name, progress %, open/closed counts]
 
-```bash
-# Open milestones (epics) with progress
-gh api repos/:owner/:repo/milestones --jq '.[] | select(.state=="open") | {title, open_issues, closed_issues}'
+  ### Issues Ready for Work
+  [List of issues that have plans or are labeled "ready"]
 
-# Open issues sorted by milestone
-gh issue list --state open --limit 20 --json number,title,milestone,labels --jq '.[] | {number, title, milestone: (.milestone.title // "none"), labels: [.labels[].name]}'
+  ### Issues Needing Plans
+  [List of high-priority issues without plans]
 
-# Check for issues with "planned" or "ready" labels
-gh issue list --state open --label "planned" --json number,title --jq '.[] | {number, title}'
+  ### Recommended Command
+  [Single ai-dev command with specific issue number if applicable]
 ```
 
-**Decision tree:**
+**Important:** Launch both Task calls in the same message to run them in parallel.
 
-| GitHub State | Recommended Command |
-|-------------|---------------------|
-| No milestones | `/ai-dev:epics` (to create them) |
-| Milestones exist, no issues | `/ai-dev:user-stories` |
-| Issues exist, none labeled "planned" | `/ai-dev:plan-issue #N` (pick highest priority) |
-| Issue labeled "planned", no local plan file | `/ai-dev:plan-issue #N` (re-fetch plan) |
-| Plan file exists for issue | `/ai-dev:work` |
-| All milestone issues closed | `/ai-dev:sync-strategy` |
+### Step 3: Synthesize Recommendations
 
-### Step 4: Check for In-Progress Work
+Once both audits return, synthesize their findings:
 
-Look for signals of work-in-progress:
+1. **Check for blockers first:**
+   - No strategy directory → `/ai-dev:kickoff` (overrides everything)
+   - GitHub not connected → `gh auth login` (must fix first)
 
-1. **Uncommitted changes** → `/ai-dev:work` (continue) or `/ai-dev:review` (if seems done)
-2. **Recent plan file** → `/ai-dev:work`
-3. **Branch with unreviewed commits** → `/ai-dev:review`
-4. **Clean state, all synced** → Next highest-priority issue
+2. **Apply priority order:**
+   | Priority | Condition | Command |
+   |----------|-----------|---------|
+   | 1 | Local uncommitted changes | `/ai-dev:work` or `/ai-dev:review` |
+   | 2 | Critical strategy gaps | Strategy command from auditor |
+   | 3 | Issue with plan exists | `/ai-dev:work` |
+   | 4 | High-priority issue needs plan | `/ai-dev:plan-issue #N` |
+   | 5 | Strategy needs sync | `/ai-dev:sync-strategy` |
+   | 6 | All complete | `/ai-dev:okrs` (next quarter) |
 
-### Step 5: Present Options
+3. **Build 2-3 options** from the audit recommendations
 
-Present **2-3 options**, each with a specific command. Always put the recommended option first.
+### Step 4: Present Options
 
-**Format:**
+Format your output:
 
-```
+```markdown
 ## Current State
 
-[1-2 sentence summary of what you found]
+[1-2 sentence summary combining both audit findings]
 
 ## Recommended Next Actions
 
 ### Option 1: [Brief description] ⭐ Recommended
-**Run:** `/ai-dev:plan-issue #47`
-**Why:** This is the highest-priority unplanned issue in the "Authentication" milestone,
-which maps to your Q1 OKR "Improve user security."
+**Run:** `/ai-dev:command`
+**Why:** [Connect to OKR, milestone progress, or workflow stage]
 
 ### Option 2: [Brief description]
-**Run:** `/ai-dev:work`
-**Why:** You have an existing plan for issue #42. Pick up where you left off.
+**Run:** `/ai-dev:command`
+**Why:** [Reasoning]
 
 ### Option 3: [Brief description]
-**Run:** `/ai-dev:sync-strategy`
-**Why:** 3 issues were closed since your last sync. Update strategy docs to reflect progress.
+**Run:** `/ai-dev:command`
+**Why:** [Reasoning]
 ```
 
-### Step 6: Let User Choose
+### Step 5: Let User Choose
 
 Use AskUserQuestion:
 
@@ -147,19 +171,19 @@ Use AskUserQuestion:
 question: "What would you like to work on next?"
 options:
   - label: "Option 1: [brief] (Recommended)"
-    description: "Run /ai-dev:plan-issue #47"
+    description: "Run /ai-dev:command"
   - label: "Option 2: [brief]"
-    description: "Run /ai-dev:work"
+    description: "Run /ai-dev:command"
   - label: "Option 3: [brief]"
-    description: "Run /ai-dev:sync-strategy"
+    description: "Run /ai-dev:command"
 ```
 
-### Step 7: Confirm the Command
+### Step 6: Confirm the Command
 
-After the user chooses, respond with the exact command to run:
+After the user chooses, respond with the exact command:
 
 ```
-Great choice! Run this command:
+Run this command:
 
 /ai-dev:plan-issue #47
 
@@ -168,7 +192,7 @@ This will analyze issue #47 and create a detailed technical implementation plan.
 
 ## State → Command Quick Reference
 
-Use this table to ensure you always recommend a command:
+Use this table when synthesizing audit results:
 
 | What You Observe | Command | Why |
 |-----------------|---------|-----|
@@ -187,39 +211,43 @@ Use this table to ensure you always recommend a command:
 | Review passed, not pushed | `/ai-dev:commit-push` | Push with quality gates |
 | Pushed, strategy outdated | `/ai-dev:sync-strategy` | Update strategy from GitHub |
 | All issues closed | `/ai-dev:okrs` | Plan next quarter |
-| Tests failing | `/ai-dev:run-tests` | Fix failing tests first |
-| Lint errors | `/ai-dev:lint-fix` | Fix lint issues |
 
 ## Special Cases
 
 ### GitHub Not Connected
+If the github-auditor reports auth failure:
 ```
-I couldn't connect to GitHub.
+GitHub is not connected.
 
 **Run:** `gh auth login`
 
-Then run `/ai-dev:continue` again to check project state.
+Then run `/ai-dev:continue` again.
 ```
 
-### Multiple Good Options
-When several things could be worked on, prioritize:
-1. **Work-in-progress** (don't lose context)
-2. **Blocking issues** (unblock other work)
-3. **Highest priority issue** (by label or milestone urgency)
-4. **Quick wins** (milestone almost complete)
+### No Strategy AND No GitHub
+If both auditors find nothing:
+```
+This project has no strategic planning or GitHub tracking.
+
+**Run:** `/ai-dev:kickoff`
+
+This will guide you through establishing vision, strategy, OKRs, and create GitHub milestones.
+```
 
 ### Everything Complete
+If both auditors report all work done:
 ```
-All tracked work is complete! Your project is in great shape.
+All tracked work is complete!
 
 **Run:** `/ai-dev:okrs`
 
-Time to plan your next quarter's objectives and kick off a new cycle.
+Time to plan your next quarter's objectives.
 ```
 
 ## Output Requirements
 
 1. **Always recommend a specific `/ai-dev:*` command**
-2. **Always explain why** (connect to OKRs, priorities, workflow stage)
+2. **Always explain why** (connect to audit findings)
 3. **Always give 2-3 options** (let user choose, but guide them)
 4. **End with the exact command to copy/paste**
+5. **Keep summaries concise** (auditors already did the deep analysis)
