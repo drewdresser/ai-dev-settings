@@ -55,6 +55,45 @@ Use TodoWrite to create a task list from the plan steps:
 [pending] Final: Run all tests and quality checks
 ```
 
+### Step 2.5: Analyze Plan for Parallelism
+
+Before executing, analyze the plan to determine if agent teams can accelerate implementation:
+
+1. **List all files each step will touch** (create, modify, or read for context)
+2. **Build a dependency graph** - Step B depends on Step A if B modifies a file A creates, B imports from a module A builds, or B's logic depends on A's output
+3. **Identify independent work streams** - Groups of steps that touch non-overlapping files with no dependency between groups
+
+**Decision rule:**
+- **2+ independent work streams found** → Use Agent Teams Mode (below)
+- **All steps are sequential** or **unsure about dependencies** → Use Fallback Mode (Step 3)
+
+If Agent Teams is available and 2+ independent streams exist, create a team:
+
+```
+Create an agent team to implement this plan in parallel. Based on my analysis,
+there are [N] independent work streams:
+
+- implementer-1: Owns [Stream 1 description]. Files: [list]. Use Sonnet.
+  Require plan approval before making changes.
+- implementer-2: Owns [Stream 2 description]. Files: [list]. Use Sonnet.
+  Require plan approval before making changes.
+[... up to 4 implementers]
+
+Do NOT run quality gates or push code yourself. Only coordinate, review plans,
+and manage integration.
+
+Each implementer may ONLY modify files in their assigned scope. If an
+implementer needs to touch a file outside their scope, they must message the
+lead and wait for approval. Require plan approval before each implementer
+starts coding - verify their plan only touches assigned files and follows
+existing patterns.
+
+After all implementers finish, verify integration (no import errors or missing
+dependencies between streams), then run quality gates and push.
+```
+
+If Agent Teams is not available, or all steps are sequential, use Fallback Mode:
+
 ### Step 3: Execute Task Loop
 
 For each task:

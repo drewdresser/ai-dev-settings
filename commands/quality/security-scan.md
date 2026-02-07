@@ -6,42 +6,68 @@ allowed-tools:
   - Read
   - Grep
   - Glob
+  - Task
 ---
 
 # Security Scan Command
 
-Scan the codebase for potential security vulnerabilities.
+Scan the codebase for potential security vulnerabilities using parallel specialist scanners.
 
 ## Scan Areas
+
+1. **Dependency vulnerabilities** - Known CVEs in packages
+2. **Secret detection** - Hardcoded credentials, API keys, tokens
+3. **Code pattern analysis** - SQL injection, XSS, command injection, SSRF
+4. **Configuration review** - Debug mode, insecure defaults, missing headers
+
+## Process
+
+If Agent Teams is available, create a team for parallel scanning with cross-validation:
+
+```
+Create an agent team to perform a comprehensive security scan. Spawn four scanners
+using Sonnet:
+
+- dependency-scanner: Audit package dependencies for known CVEs. Run pip audit,
+  npm audit, or cargo audit as appropriate.
+- secret-scanner: Scan for hardcoded secrets, API keys, passwords, tokens,
+  certificates, and .env files committed to git.
+- code-pattern-scanner: Analyze code for OWASP Top 10 patterns - SQL injection,
+  XSS, command injection, SSRF, insecure deserialization, path traversal.
+- config-scanner: Review configs for debug mode, insecure defaults, missing
+  security headers, permissive CORS, exposed admin endpoints.
+
+Do NOT scan anything yourself. Only coordinate and produce the final report.
+
+After all scans complete, have the scanners cross-validate findings. For example,
+if the dependency scanner finds a vulnerable package, the code-pattern scanner
+should check if the vulnerable function is actually called. If the secret scanner
+finds an API key, the config scanner should check if .gitignore covers it.
+Findings confirmed by multiple scanners get elevated severity.
+```
+
+If Agent Teams is not available, run all scans sequentially:
 
 ### 1. Dependency Vulnerabilities
 ```bash
 # Python
 uv pip audit
-
 # Node
 pnpm audit
 ```
 
 ### 2. Secret Detection
 ```bash
-# Check for hardcoded secrets
 grep -rn "password\s*=" --include="*.py" --include="*.ts" .
 grep -rn "api_key\s*=" --include="*.py" --include="*.ts" .
 grep -rn "secret\s*=" --include="*.py" --include="*.ts" .
 ```
 
 ### 3. Code Patterns
-- SQL injection risks
-- Command injection risks
-- XSS vulnerabilities
-- Insecure deserialization
-- Path traversal
+- SQL injection, command injection, XSS, insecure deserialization, path traversal
 
 ### 4. Configuration
-- Debug mode enabled
-- Insecure defaults
-- Missing security headers
+- Debug mode, insecure defaults, missing security headers
 
 ## Output Format
 
@@ -75,11 +101,9 @@ grep -rn "secret\s*=" --include="*.py" --include="*.ts" .
 ### Dependency Vulnerabilities
 | Package | Version | Vulnerability | Fix Version |
 |---------|---------|---------------|-------------|
-| requests | 2.25.0 | CVE-2023-xxx | 2.28.0 |
 
 ### Recommendations
 1. [Prioritized action items]
-2. [...]
 ```
 
 ## Common Patterns to Check
@@ -88,7 +112,6 @@ grep -rn "secret\s*=" --include="*.py" --include="*.ts" .
 ```python
 # Dangerous
 query = f"SELECT * FROM users WHERE id = {user_id}"
-
 # Safe
 cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
 ```
@@ -97,7 +120,6 @@ cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
 ```python
 # Dangerous
 os.system(f"echo {user_input}")
-
 # Safe
 subprocess.run(["echo", user_input], shell=False)
 ```
@@ -106,28 +128,6 @@ subprocess.run(["echo", user_input], shell=False)
 ```javascript
 // Dangerous
 element.innerHTML = userInput;
-
 // Safe
 element.textContent = userInput;
-```
-
-## Example
-
-```
-Running security scan...
-
-Dependency Audit:
-✓ Python: No known vulnerabilities
-⚠ Node: 2 moderate vulnerabilities
-
-Secret Detection:
-⚠ Found 1 potential hardcoded secret
-  src/config.py:15 - API_KEY = "sk-..."
-
-Code Analysis:
-⚠ src/api/search.py:42 - Potential SQL injection
-✓ No XSS vulnerabilities detected
-✓ No command injection detected
-
-Summary: 3 issues found (0 critical, 1 high, 2 medium)
 ```
