@@ -7,7 +7,6 @@ allowed-tools:
   - Edit
   - Glob
   - Bash
-  - AskUserQuestion
 ---
 
 # Learn: Capture Session Learnings
@@ -39,44 +38,30 @@ Review the full conversation history. For each meaningful exchange, ask:
 - Was a convention agreed upon?
 - Was a tool or config insight gained?
 
-### Step 2: Extract Candidates
+### Step 2: Extract All Learnings
 
-Build a list of 1-5 candidate learnings. For each, draft:
+**Err on the side of saving everything.** If in doubt, save it. It's easier to prune later than to lose an insight.
+
+Build a list of all learnings from the session. For each, draft:
 - A short title (imperative or descriptive, under 60 chars)
 - A category from the table above
 - A 1-sentence summary
 
-**Skip anything that is:**
-- Generic knowledge (things any developer would know)
+**Only skip things that are:**
+- Truly generic knowledge (things any developer would know)
 - Already documented in the project's CLAUDE.md or strategy docs
-- Speculative (not validated during this session)
 
 If the session had no meaningful learnings, say so and exit. Don't force it.
 
-### Step 3: Present Candidates to User
-
-Use `AskUserQuestion` with multi-select to let the user choose which learnings to save:
-
-```
-Which learnings should I save from this session?
-
-Options (multi-select):
-1. [category] Title - summary
-2. [category] Title - summary
-3. [category] Title - summary
-```
-
-If the user selects none, exit gracefully.
-
-### Step 4: Create Learnings Directory
+### Step 3: Create Learnings Directory
 
 ```bash
 mkdir -p learnings
 ```
 
-### Step 5: Write Individual Learning Files
+### Step 4: Write Individual Learning Files
 
-For each selected learning, create a file named `learnings/YYYY-MM-DD-slug.md` where:
+For each learning, create a file named `learnings/YYYY-MM-DD-slug.md` where:
 - `YYYY-MM-DD` is today's date
 - `slug` is a lowercase hyphenated version of the title (max 50 chars)
 
@@ -105,7 +90,7 @@ tags: [relevant-tag-1, relevant-tag-2]
 
 Keep each file focused and under 30 lines. One insight per file.
 
-### Step 6: Update INDEX.md
+### Step 5: Update INDEX.md
 
 Read `learnings/INDEX.md` if it exists. Then update it with the new entries.
 
@@ -131,18 +116,9 @@ Read `learnings/INDEX.md` if it exists. Then update it with the new entries.
 
 Keep the Recent section to the last 20 entries. If it exceeds 20, trim the oldest.
 
-### Step 7: Suggest CLAUDE.md Addition (Optional)
+### Step 6: Flag CLAUDE.md Candidates
 
-After saving, check if any learning is universally applicable (would help in every session, not just future similar work). If so, suggest a one-line addition to the project's `CLAUDE.md`:
-
-```
-One of these learnings might be worth adding to your CLAUDE.md:
-  - "[concise one-liner version of the learning]"
-
-Want me to add it?
-```
-
-Only suggest this for truly universal insights. Most learnings belong in `learnings/` only.
+After saving, check if any learning is universally applicable (would help in every session). If so, note it in the output summary — but don't ask, just flag it for the user's awareness.
 
 ## Output
 
