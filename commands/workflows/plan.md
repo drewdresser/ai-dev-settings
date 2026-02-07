@@ -47,22 +47,38 @@ Use AskUserQuestion to validate understanding:
 
 ### Phase 2: Codebase Research
 
-Use Task tool with subagent_type="Explore" to understand the codebase:
+If Agent Teams is available, create a team for parallel codebase research. Spawn only after Phase 1 requirements are clarified:
 
-**Architecture Analysis:**
-- Project structure and conventions
-- Relevant modules and files
-- Existing patterns for similar features
+```
+Create an agent team to research the codebase for planning this feature:
+[Include clarified requirements from Phase 1]
 
-**Pattern Discovery:**
-- How similar features are implemented
-- Test patterns in use
-- Error handling conventions
+Spawn three researchers using Sonnet:
 
-**Dependency Mapping:**
-- What this feature will interact with
-- External dependencies needed
-- Potential breaking changes
+- architecture-researcher: Analyze project structure, identify relevant modules,
+  files, and conventions that apply to this feature.
+- pattern-researcher: Find similar feature implementations in the codebase,
+  discover test patterns, error handling conventions, and coding style.
+- dependency-researcher: Map internal module dependencies and external packages
+  relevant to this feature. Identify potential breaking changes.
+
+Do NOT write the plan yourself. Only coordinate and compile research.
+
+After all researchers finish, have them cross-reference findings. For example,
+the architecture-researcher's file map helps the pattern-researcher know where
+to look for conventions, and the dependency-researcher flags potential conflicts
+with patterns the pattern-researcher found. Findings confirmed by multiple
+researchers get higher confidence.
+
+Shut down all teammates after compiling the research summary - the interactive
+Phase 3 should not have idle teammates consuming resources.
+```
+
+If Agent Teams is not available, use Task tool with subagent_type="Explore":
+
+- Project structure, conventions, relevant modules and files
+- Similar feature implementations, test patterns, error handling conventions
+- Internal module dependencies, external packages, potential breaking changes
 
 ### Phase 3: Approach Selection
 
@@ -76,6 +92,8 @@ Which approach would you prefer?
 2. [Approach B] - [tradeoffs]
 3. Discuss further before deciding
 ```
+
+In Agent Teams mode, include evidence from the research phase to support each approach (e.g., "Approach A follows the pattern used in `src/auth/` while Approach B would introduce a new pattern").
 
 Document the decision and rationale.
 

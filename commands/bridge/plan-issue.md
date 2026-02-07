@@ -20,7 +20,7 @@ Bridge a GitHub Issue (user story) to a detailed technical implementation plan. 
 
 1. Reads the GitHub Issue and extracts requirements
 2. Reads strategic context from `/strategy/` directory
-3. Runs research agents to analyze the codebase
+3. Runs research agents to analyze the codebase (parallelized with Agent Teams)
 4. Generates a technical implementation plan
 5. Links the plan back to the issue
 
@@ -69,19 +69,31 @@ Extract:
 
 ### Step 3: Codebase Research
 
-Run research agents to understand the codebase:
+If Agent Teams is available, create a team for parallel codebase research:
 
-1. **Codebase Analyst** - Understand project structure
-   - Identify relevant files and modules
-   - Map dependencies
-   - Find similar implementations
+```
+Create an agent team to research the codebase for planning issue #[NUMBER].
+Spawn three researchers using Sonnet:
 
-2. **Pattern Researcher** - Find existing patterns
-   - How similar features are implemented
-   - Coding conventions in use
-   - Test patterns
+- issue-researcher: Deep-dive into the issue's strategic context. Read
+  /strategy/ files, find OKR connections, identify relevant non-goals and
+  ADRs that constrain implementation.
+- architecture-analyst: Analyze project structure to identify affected files,
+  modules, and dependencies for this feature. Map the dependency graph.
+- pattern-researcher: Find existing implementations of similar features,
+  discover coding conventions, test patterns, and error handling approaches
+  used in this codebase.
 
-Use the Task tool with subagent_type="Explore":
+Do NOT write the plan yourself. Only coordinate and compile research.
+
+After all researchers finish, have them cross-reference findings. For example,
+the architecture-analyst's file map helps the pattern-researcher know where to
+check for conventions, and the issue-researcher's non-goals help the
+architecture-analyst narrow scope. Findings confirmed by multiple researchers
+get higher confidence.
+```
+
+If Agent Teams is not available, use Task tool with subagent_type="Explore":
 ```
 "Analyze the codebase to understand how to implement [feature].
 Find related files, existing patterns, and dependencies."
