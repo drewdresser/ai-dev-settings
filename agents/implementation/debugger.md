@@ -8,7 +8,7 @@ tools:
   - Grep
   - Glob
   - Write
-model: sonnet
+model: opus
 skills:
   - optimizing-performance
 ---

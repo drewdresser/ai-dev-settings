@@ -5,7 +5,7 @@ tools:
   - Bash
   - Read
   - Glob
-model: sonnet
+model: opus
 skills:
   - managing-git
 ---

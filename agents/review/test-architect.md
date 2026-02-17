@@ -8,7 +8,7 @@ tools:
   - Glob
   - Grep
   - Bash
-model: sonnet
+model: opus
 skills:
   - designing-tests
   - analyzing-projects

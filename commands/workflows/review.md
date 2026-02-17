@@ -1,6 +1,6 @@
 ---
 name: ai-dev:review
-description: Multi-agent code review. Runs code-reviewer, security-auditor, and test-architect in parallel, then synthesizes findings.
+description: Multi-agent code review. Runs code-reviewer, security-auditor, test-architect, and product-reviewer in parallel, then synthesizes findings.
 allowed-tools:
   - Read
   - Grep
@@ -29,29 +29,32 @@ If specific files are provided as arguments, review those instead.
 If Agent Teams is available, create a team for parallel review with cross-challenge:
 
 ```
-Create an agent team to review these code changes. Spawn three reviewers using Sonnet:
+Create an agent team to review these code changes. Spawn four reviewers using Opus:
 
 - code-quality-reviewer: code quality, patterns, maintainability, DRY, error handling
 - security-reviewer: OWASP Top 10, input validation, auth/authz, data exposure, injection
 - test-coverage-reviewer: test quality, coverage gaps, edge cases, test anti-patterns
+- product-reviewer: strategic alignment, user value, scope, consistency with product vision and OKRs
 
 Do NOT implement or fix code yourself. Only coordinate and synthesize.
 
 After each reviewer finishes, have them share findings with each other to cross-challenge.
 For example, if the security reviewer finds an input validation gap, the test reviewer
-should confirm whether tests cover that case. Findings confirmed by multiple reviewers
-get elevated severity.
+should confirm whether tests cover that case. If the product reviewer flags scope creep,
+the code reviewer should confirm whether the extra code is justified. Findings confirmed
+by multiple reviewers get elevated severity.
 
 Once cross-challenge is complete, synthesize all findings into the output format below.
 ```
 
-If Agent Teams is not available, use Task tool to run three subagents in parallel:
+If Agent Teams is not available, use Task tool to run four subagents in parallel:
 
 - `subagent_type="general-purpose"` with code-reviewer agent prompt
 - `subagent_type="general-purpose"` with security-auditor agent prompt
 - `subagent_type="general-purpose"` with test-architect agent prompt
+- `subagent_type="general-purpose"` with product-reviewer agent prompt
 
-Launch all three Task calls in the same message. Each reviews the same changes from their perspective.
+Launch all four Task calls in the same message. Each reviews the same changes from their perspective.
 
 ### Step 3: Synthesize Findings
 
@@ -91,7 +94,13 @@ You are a senior engineer conducting a rigorous code review. Your goal is to cat
 - Appropriate abstraction levels
 - Test coverage
 
-### 5. Style
+### 5. Product Alignment
+- Strategic fit with vision, OKRs, and epics
+- User value delivered
+- Scope appropriateness
+- Consistency with product direction
+
+### 6. Style
 - Naming conventions
 - Code organization
 - Documentation quality

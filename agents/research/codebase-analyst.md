@@ -6,7 +6,7 @@ tools:
   - Glob
   - Grep
   - Bash
-model: sonnet
+model: opus
 skills:
   - analyzing-projects
   - designing-architecture
