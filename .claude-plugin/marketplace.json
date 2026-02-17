@@ -12,7 +12,7 @@
       "name": "ai-dev",
       "source": "./",
       "description": "Strategic planning meets rapid execution. 10 agents, 20+ commands, 7 skills for vision-to-code workflow with main-branch development.",
-      "version": "1.2.0",
+      "version": "1.5.0",
       "author": {
         "name": "Drew Dresser"
       },
